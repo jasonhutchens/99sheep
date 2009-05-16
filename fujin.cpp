@@ -4,6 +4,7 @@
 #include <engine.hpp>
 #include <entity_manager.hpp>
 #include <cloud.hpp>
+#include <bullet.hpp>
 
 #include <hgeSprite.h>
 #include <Box2D.h>
@@ -31,7 +32,9 @@ Fujin::Fujin( float max_strength, float scale )
     m_isAsleep( false ),
     m_channel( 0 ),
     m_suck( false ),
-    m_target_scale( 0.0f )
+    m_target_scale( 0.0f ),
+    m_bullet_timer( 0.0f ),
+    m_bullets()
 {
 }
 
@@ -42,6 +45,11 @@ Fujin::~Fujin()
     {
         Engine::instance()->hge()->Channel_Stop( m_channel );
         m_channel = 0;
+    }
+    std::vector< Bullet * >::iterator i;
+    for ( i = m_bullets.begin(); i != m_bullets.end(); ++i )
+    {
+        delete * i;
     }
 	hgeParticleSystem * sleep( Engine::rm()->GetParticleSystem( "sleep" ) );
 	sleep->Stop();
@@ -190,6 +198,7 @@ Fujin::doUpdate( float dt )
 	hgeParticleSystem * sleep( Engine::rm()->GetParticleSystem( "sleep" ) );
 
     b2Vec2 acceleration( 0.0f, 0.0f );
+    b2Vec2 shoot( 0.0f, 0.0f );
 
     if ( Engine::instance()->isPaused() || m_isAsleep )
     {
@@ -200,6 +209,7 @@ Fujin::doUpdate( float dt )
 		Engine::instance()->hideMouse();
 
         acceleration = pad.getStick( XPAD_THUMBSTICK_LEFT );
+        shoot = pad.getStick( XPAD_THUMBSTICK_RIGHT );
     }
 	else
 	{
@@ -240,6 +250,25 @@ Fujin::doUpdate( float dt )
 	if (m_suckedClouds.size() == 0)
     {
         m_isSick = false;
+    }
+
+    m_bullet_timer -= dt;
+    if ( m_bullet_timer < 0.0f )
+    {
+        m_bullet_timer = 0.0f;
+    }
+    if ( shoot.LengthSquared() > 0.2f && m_bullet_timer <= 0.0f )
+    {
+        m_bullet_timer = 0.1f;
+        Bullet * bullet( static_cast< Bullet * >( Engine::em()->factory( Bullet::TYPE ) ) );
+        bullet->setSprite( "white_bullet" );
+        bullet->setScale( 1.0f );
+        bullet->setBlack( m_black );
+        bullet->init();
+        b2Vec2 velocity( 0.0f, 0.0f );
+        velocity = 100000.0f * shoot;
+        bullet->getBody()->SetLinearVelocity( velocity );
+        //m_bullets.push_back( bullet );
     }
 
 	bool dead( acceleration.LengthSquared() < 0.1f );

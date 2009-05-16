@@ -713,6 +713,7 @@ Engine::_initGraphics()
     m_hge->System_SetState( HGE_USESOUND, true );
     m_hge->System_SetState( HGE_SHOWSPLASH, false );
     m_hge->System_SetState( HGE_FPS, HGEFPS_UNLIMITED );
+    m_hge->System_SetState( HGE_TEXTUREFILTER, false );
 
     m_config.init();
 

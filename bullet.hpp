@@ -1,7 +1,7 @@
 //==============================================================================
 
-#ifndef ArseFujin
-#define ArseFujin
+#ifndef ArseBullet
+#define ArseBullet
 
 #pragma once
 
@@ -12,36 +12,27 @@
 
 #include <vector>
 
-class Bullet;
-class Cloud;
-
 //------------------------------------------------------------------------------
-class Fujin : public Entity, public Damageable
+class Bullet : public Entity, public Damageable
 {
   public:
-    static const unsigned int TYPE = 1;
-    static Entity * factory() { return new Fujin(); }
+    static const unsigned int TYPE = 4;
+    static Entity * factory() { return new Bullet(); }
 
-    Fujin( float max_strength = 1.0f, float scale = 1.0f );
-    virtual ~Fujin();
+    Bullet( float max_strength = 1.0f, float scale = 1.0f );
+    virtual ~Bullet();
 
     virtual void collide( Entity * entity, b2ContactPoint * point );
 
     virtual void persistToDatabase();
 
     static void registerEntity();
-	bool isBlowing();
-	const b2AABB& GetWindAABB();
 
-    bool isSick();
-    void setSick( bool sick );
-    bool isAsleep();
-    void setAsleep( bool sleep );
     void setTargetScale( float scale );
 
   protected:
-    Fujin( const Fujin & );
-    Fujin & operator=( const Fujin & );
+    Bullet( const Bullet & );
+    Bullet & operator=( const Bullet & );
 
     virtual void onSetScale();
     virtual void doInit();
@@ -49,21 +40,10 @@ class Fujin : public Entity, public Damageable
     virtual void doRender( float scale );
     virtual void initFromQuery( Query & query );
     float lookAt(const b2Vec2& targetPoint);
-	void Blow( float power = 1.0f );
-	void suckUpClouds();
-	void blowOutClouds();
 
-	std::vector<Cloud*> m_suckedClouds;
 	b2AABB m_AABB;
-	float m_timeToNextCloudBlowOut;
-	bool m_isBlowing;
-    bool m_isSick;
-    bool m_isAsleep;
     HCHANNEL m_channel;
-    bool m_suck;
     float m_target_scale;
-    float m_bullet_timer;
-    std::vector< Bullet * > m_bullets;
 };
 
 #endif

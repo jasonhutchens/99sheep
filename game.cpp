@@ -7,6 +7,7 @@
 #include <clump_manager.hpp>
 #include <viewport.hpp>
 #include <fujin.hpp>
+#include <bullet.hpp>
 #include <cloud.hpp>
 #include <girder.hpp>
 #include <score.hpp>
@@ -81,6 +82,7 @@ Game::init()
     notifyOnCollision( true );
 
     Fujin::registerEntity();
+    Bullet::registerEntity();
     Cloud::registerEntity();
     Girder::registerEntity();
 
@@ -106,7 +108,7 @@ Game::init()
     b2Vec2 position( 0.0f, 0.0f );
     float angle( 0.0f );
     m_fujin->setSprite( "white_ship" );
-    m_fujin->setScale( FUJIN / ZOOM[m_zoom] );
+    m_fujin->setScale( 1.0f );
     m_fujin->init();
     m_fujin->getBody()->SetXForm( position, angle );
     m_fujin->setTargetScale( FUJIN / ZOOM[m_zoom] );

@@ -42,6 +42,14 @@ Texture black_ship
 {
     filename=black_ship.png
 }
+Texture white_bullet
+{
+    filename=white_bullet.png
+}
+Texture black_bullet
+{
+    filename=black_bullet.png
+}
 Texture fujin_suck
 {
     filename=fujin_suck.png
@@ -137,6 +145,18 @@ Sprite white_ship
 Sprite black_ship
 {
     texture=black_ship
+    rect=0,0,32,32
+    hotspot=16,16
+}
+Sprite white_bullet
+{
+    texture=white_bullet
+    rect=0,0,32,32
+    hotspot=16,16
+}
+Sprite black_bullet
+{
+    texture=black_bullet
     rect=0,0,32,32
     hotspot=16,16
 }
