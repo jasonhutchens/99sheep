@@ -292,12 +292,12 @@ Score::render()
             if ( config.leaderboard && ! m_error )
             {
                 font->printf( cx, 60.0f, HGETEXT_CENTER,
-                              "G L O B A L   B L O W   H A R D S" );
+                              "G L O B A L   P E E P S" );
             }
             else
             {
                 font->printf( cx, 60.0f, HGETEXT_CENTER,
-                              "L O C A L   B L O W   H A R D S" );
+                              "L O C A L   P E E P S" );
             }
             if ( m_error )
             {
@@ -307,7 +307,7 @@ Score::render()
             else
             {
                 font->printf( cx, 2.0f * cy - 90.0f, HGETEXT_CENTER,
-                              "Y O U   S U C K   T H E   M O S T" );
+                              "Y O U   H E R D   P R O P E R L Y" );
             }
             if ( config.leaderboard )
             {

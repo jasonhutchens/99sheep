@@ -15,11 +15,9 @@ class hgeGUI;
 enum Control
 {
     CTRL_NONE = 0,
-    CTRL_TUTORIAL = 1,
-    CTRL_START = 2,
-    CTRL_SCORE = 3,
-    CTRL_CREDITS = 4,
-    CTRL_EXIT = 5
+    CTRL_START = 1,
+    CTRL_SCORE = 2,
+    CTRL_EXIT = 3
 };
 
 //------------------------------------------------------------------------------

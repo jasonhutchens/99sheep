@@ -190,7 +190,6 @@ Fujin::doUpdate( float dt )
 	hgeParticleSystem * sleep( Engine::rm()->GetParticleSystem( "sleep" ) );
 
     b2Vec2 acceleration( 0.0f, 0.0f );
-    float power( 0.0f );
 
     if ( Engine::instance()->isPaused() || m_isAsleep )
     {
@@ -200,15 +199,7 @@ Fujin::doUpdate( float dt )
     {
 		Engine::instance()->hideMouse();
 
-        b2Vec2 offset( pad.getStick( XPAD_THUMBSTICK_RIGHT ) );
-        offset.y *= -1.0f;
-        float angle = lookAt(offset);
-
         acceleration = pad.getStick( XPAD_THUMBSTICK_LEFT );
-
-        power = pad.getTrigger(XPAD_TRIGGER_LEFT) -
-                pad.getTrigger(XPAD_TRIGGER_RIGHT);
-
     }
 	else
 	{
@@ -231,15 +222,6 @@ Fujin::doUpdate( float dt )
             acceleration.x += 1.0f;
 		}
 
-        if ( Engine::hge()->Input_GetKeyState( HGEK_LBUTTON ) )
-        {
-            power += 1.0f;
-        }
-        if ( Engine::hge()->Input_GetKeyState( HGEK_RBUTTON ) )
-        {
-            power -= 1.0f;
-        }
-
 		b2Vec2 position (m_body->GetPosition());
 		b2Vec2 mousePosition(mouse.getMousePos());
 		b2Vec2 newPos = mousePosition - position;
@@ -260,69 +242,17 @@ Fujin::doUpdate( float dt )
         m_isSick = false;
     }
 
-	bool dead( acceleration.LengthSquared() < 0.2f );
-	acceleration *= ( 1000.0f * m_scale * dt );
+	bool dead( acceleration.LengthSquared() < 0.1f );
     acceleration.y *= -1.0f;
     b2Vec2 velocity( m_body->GetLinearVelocity() );
-    velocity += acceleration;
+    float angle = lookAt( velocity );
+    velocity = 1000.0f * acceleration;
 	if ( dead )
 	{
-	    velocity *= 0.9f;
+	    velocity *= 0.0f;
 	}
 	m_body->SetAngularVelocity( 0.0f );
     m_body->SetLinearVelocity( velocity );
-
-	if( power > 0.01f || power < -0.01f )
-	{
-		breath->Fire();
-		Blow( power );
-		m_isBlowing=true;
-        if ( power > 0.0f )
-        {
-            if ( m_suck && m_channel != 0 )
-            {
-            Engine::instance()->hge()->Channel_Stop( m_channel );
-            m_channel = 0;
-            }
-            m_suck = false;
-            int volume( static_cast< int >( 10.0f * power ) );
-            if ( m_channel == 0 )
-            {
-		    m_channel = Engine::instance()->hge()->Effect_PlayEx(
-                    Engine::rm()->GetEffect( "wind" ), volume, 0, 1, true );
-            }
-            Engine::instance()->hge()->Channel_SetVolume( m_channel, volume );
-			blowOutClouds();
-        }
-        else
-        {
-            if ( ! m_suck && m_channel != 0  )
-            {
-            Engine::instance()->hge()->Channel_Stop( m_channel );
-            m_channel = 0;
-            }
-            m_suck = true;
-            int volume( static_cast< int >( - 10.0f * power ) );
-            if ( m_channel == 0 )
-            {
-		    m_channel = Engine::instance()->hge()->Effect_PlayEx(
-                    Engine::rm()->GetEffect( "pant" ), volume, 0, 1, true );
-            }
-            Engine::instance()->hge()->Channel_SetVolume( m_channel, volume );
-			suckUpClouds();
-        }
-		breath->info.nEmission = static_cast< int >( 20.0f * power );
-    }
-	else
-	{
-		m_isBlowing=false;
-		breath->Stop();
-        if ( m_channel != 0 )
-        {
-            Engine::instance()->hge()->Channel_Stop( m_channel );
-            m_channel = 0;
-        }
-	}
 
 	sleep->info.nEmission = 3;
 
@@ -333,7 +263,7 @@ Fujin::doUpdate( float dt )
 	sleep->MoveTo( position.x / m_scale, position.y / m_scale, false );
 	position = m_body->GetPosition() - 64.0f * m_scale * direction;
 	breath->MoveTo( position.x / m_scale, position.y / m_scale, true );
-    float angle( m_body->GetAngle() );
+    angle = m_body->GetAngle();
 	breath->info.fDirection= angle -M_PI - 0.3f;
 		
 	breath->Update( dt );
@@ -389,9 +319,9 @@ float Fujin::lookAt( const b2Vec2& targetPoint )
 	b2Vec2 offset(targetPoint );
 	float length( offset.Normalize() );
 	float angle =0;
-	if ( length > 0.9f )
+	if ( length > 0.2f )
 	{
-		b2Vec2 vertical( 0.0f, 1.0f );
+		b2Vec2 vertical( 0.0f, -1.0f );
 		angle=( acosf( b2Dot( offset, vertical ) ) );
 		if ( b2Cross( vertical, offset ) < 0.0f )
 		{

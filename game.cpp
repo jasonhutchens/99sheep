@@ -304,11 +304,7 @@ Game::render()
 	    font->SetColor( 0xFFFFFFFF );
     }
 
-	font->printf( vp->screen().x * 0.5f , vp->screen().y - 30.0f, HGETEXT_CENTER, progressText.c_str() );
-	font->printf( vp->screen().x * 0.5f, 10.0f, HGETEXT_CENTER, timeRemainingText );
-	font->printf(vp->screen().x - 10.0f, 10.0f,HGETEXT_RIGHT, "x%04d",
-    static_cast<int>(Engine::cm()->getClumpMultiplier() ));
-	font->printf( 10.0f, 10.0f, HGETEXT_LEFT, "%09dpts", m_score );
+	font->printf( vp->screen().x * 0.5f, vp->screen().y - 30.0f, HGETEXT_CENTER, timeRemainingText );
 
     vp->setTransform();
 }
