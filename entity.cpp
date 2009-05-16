@@ -19,7 +19,8 @@ Entity::Entity( float scale )
     m_body( 0 ),
     m_aabb( 0 ),
     m_sprite_id( 0 ),
-    m_sprite( 0 )
+    m_sprite( 0 ),
+    m_black( true )
 {
     m_aabb = new b2AABB();
 }
@@ -134,6 +135,20 @@ int
 Entity::getZoom() const
 {
     return m_zoom;
+}
+
+//------------------------------------------------------------------------------
+void
+Entity::setBlack( bool black )
+{
+    m_black = black;
+}
+
+//------------------------------------------------------------------------------
+bool
+Entity::getBlack() const
+{
+    return m_black;
 }
 
 //------------------------------------------------------------------------------

@@ -44,6 +44,9 @@ class Entity
     void setZoom( int zoom );
     int getZoom() const;
 
+    void setBlack( bool black );
+    bool getBlack() const;
+
   protected:
     Entity( const Entity & );
     Entity & operator=( const Entity & );
@@ -68,6 +71,7 @@ class Entity
     b2AABB * m_aabb;
     sqlite_int64 m_sprite_id;
     hgeSprite * m_sprite;
+    bool m_black;
 };
 
 #endif

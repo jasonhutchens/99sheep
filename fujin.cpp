@@ -338,6 +338,15 @@ Fujin::doUpdate( float dt )
 		
 	breath->Update( dt );
 	sleep->Update( dt );
+
+    if ( getBlack() )
+    {
+        m_sprite = Engine::rm()->GetSprite( "black_ship" );
+    }
+    else
+    {
+        m_sprite = Engine::rm()->GetSprite( "white_ship" );
+    }
 }
 
 //------------------------------------------------------------------------------

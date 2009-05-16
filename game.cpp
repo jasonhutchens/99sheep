@@ -112,6 +112,9 @@ Game::init()
     m_fujin->setTargetScale( FUJIN / ZOOM[m_zoom] );
     m_fujin->setZoom( m_zoom );
 
+    setColour( 0xFFFFFFFF );
+    m_fujin->setBlack( true );
+
     /*
     for ( int zoom = 0; zoom < 5; ++ zoom )
     {
@@ -189,12 +192,14 @@ Game::update( float dt )
         if ( pad.buttonDown( XPAD_BUTTON_LEFT_SHOULDER ) )
         {
             m_black = true;
-            setColour( 0x00000000 );
+            setColour( 0xFFFFFFFF );
+            m_fujin->setBlack( true );
         }
         else if ( pad.buttonDown( XPAD_BUTTON_RIGHT_SHOULDER ) )
         {
             m_black = false;
-            setColour( 0xFFFFFFFF );
+            setColour( 0xFF000000 );
+            m_fujin->setBlack( false );
         }
     }
     else
@@ -292,7 +297,7 @@ Game::render()
 
     if ( m_black )
     {
-	    font->SetColor( 0x00000000 );
+	    font->SetColor( 0xFF000000 );
     }
     else
     {
