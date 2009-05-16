@@ -57,7 +57,8 @@ Game::Game()
     m_last_zoom( 1.0f ),
     m_zoom( 0 ),
     m_fujin( 0 ),
-	m_gameOutTimer(0)
+	m_gameOutTimer(0),
+    m_black( true )
 {
 }
 
@@ -96,8 +97,8 @@ Game::init()
     vp->offset().y = 0.0f;
     vp->centre().x = 0.0f;
     vp->centre().y = 0.0f;
-    vp->bounds().x = 800.0f;
-    vp->bounds().y = 600.0f;
+    vp->bounds().x = 1280.0f;
+    vp->bounds().y = 720.0f;
     vp->setAngle( 0.0f );
     vp->setScale( ZOOM[m_zoom] );
 
@@ -185,19 +186,15 @@ Game::update( float dt )
 
     if ( pad.isConnected() )
     {
-        if ( pad.buttonDown( XPAD_BUTTON_LEFT_SHOULDER ) && m_zoom > 0 )
+        if ( pad.buttonDown( XPAD_BUTTON_LEFT_SHOULDER ) )
         {
-            --m_zoom;
-            m_fujin->setTargetScale( FUJIN / ZOOM[m_zoom] );
-            m_fujin->setZoom( m_zoom );
-            hge->Effect_PlayEx( Engine::rm()->GetEffect( "up" ), 100 );
+            m_black = true;
+            setColour( 0x00000000 );
         }
-        else if ( pad.buttonDown( XPAD_BUTTON_RIGHT_SHOULDER ) && m_zoom < 4 )
+        else if ( pad.buttonDown( XPAD_BUTTON_RIGHT_SHOULDER ) )
         {
-            ++m_zoom;
-            m_fujin->setTargetScale( FUJIN / ZOOM[m_zoom] );
-            m_fujin->setZoom( m_zoom );
-            hge->Effect_PlayEx( Engine::rm()->GetEffect( "down" ), 100 );
+            m_black = false;
+            setColour( 0xFFFFFFFF );
         }
     }
     else
@@ -293,7 +290,15 @@ Game::render()
 		progressText.append("  ");
 	}
 
-	font->SetColor( 0xFFFFFFFF );
+    if ( m_black )
+    {
+	    font->SetColor( 0x00000000 );
+    }
+    else
+    {
+	    font->SetColor( 0xFFFFFFFF );
+    }
+
 	font->printf( vp->screen().x * 0.5f , vp->screen().y - 30.0f, HGETEXT_CENTER, progressText.c_str() );
 	font->printf( vp->screen().x * 0.5f, 10.0f, HGETEXT_CENTER, timeRemainingText );
 	font->printf(vp->screen().x - 10.0f, 10.0f,HGETEXT_RIGHT, "x%04d",
@@ -336,33 +341,33 @@ Game::_initArena()
         {
             case 0:
             {
-                dimensions.x = 800.0f;
+                dimensions.x = 1280.0f;
                 dimensions.y = 1.0f;
                 position.x = 0.0f;
-                position.y = -301.0f;
+                position.y = -361.0f;
                 break;
             }
             case 1:
             {
                 dimensions.x = 1.0f;
-                dimensions.y = 600.0f;
-                position.x = 401.0f;
+                dimensions.y = 720.0f;
+                position.x = 641.0f;
                 position.y = 0.0f;
                 break;
             }
             case 2:
             {
-                dimensions.x = 800.0f;
+                dimensions.x = 1280.0f;
                 dimensions.y = 1.0f;
                 position.x = 0.0f;
-                position.y = 301.0f;
+                position.y = 361.0f;
                 break;
             }
             case 3:
             {
                 dimensions.x = 1.0f;
-                dimensions.y = 600.0f;
-                position.x = -401.0f;
+                dimensions.y = 720.0f;
+                position.x = -641.0f;
                 position.y = 0.0f;
                 break;
             }

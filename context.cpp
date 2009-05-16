@@ -6,7 +6,8 @@
 //------------------------------------------------------------------------------
 Context::Context()
     :
-    m_handles_collisions( false )
+    m_handles_collisions( false ),
+    m_colour( 0 )
 {
 }
 
@@ -34,6 +35,20 @@ bool
 Context::shouldCollide( Entity * left, Entity * right )
 {
     return false;
+}
+
+//------------------------------------------------------------------------------
+DWORD
+Context::getColour()
+{
+    return m_colour;
+}
+
+//------------------------------------------------------------------------------
+void
+Context::setColour( DWORD colour )
+{
+    m_colour = colour;
 }
 
 //==============================================================================

@@ -33,7 +33,6 @@ Engine::Engine()
     m_vp( 0 ),
     m_em( 0 ),
 	m_cm( 0 ),
-    m_colour( 0 ),
     m_dd( 0 ),
     m_overlay( 0 ),
     m_contexts(),
@@ -201,7 +200,6 @@ void
 Engine::switchContext( EngineState state )
 {
     m_running = false;
-    m_colour = 0;
 
     if ( m_state != STATE_NONE )
     {
@@ -236,13 +234,6 @@ Context *
 Engine::getContext()
 {
     return m_contexts[m_state];
-}
-
-//------------------------------------------------------------------------------
-void
-Engine::setColour( DWORD colour )
-{
-    m_colour = colour;
 }
 
 //------------------------------------------------------------------------------
@@ -587,7 +578,7 @@ Engine::_update()
     if ( m_dd->GetFlags() != 0 )
     {
         m_hge->Gfx_BeginScene();
-        m_hge->Gfx_Clear( 0 );
+        m_hge->Gfx_Clear( m_contexts[m_state]->getColour() );
         m_contexts[m_state]->render();
     }      
 
@@ -646,7 +637,7 @@ Engine::_render()
     if ( m_dd->GetFlags() == 0 )
     {
         m_hge->Gfx_BeginScene();
-        m_hge->Gfx_Clear( m_colour );
+        m_hge->Gfx_Clear( m_contexts[m_state]->getColour() );
         m_contexts[m_state]->render();
         m_hge->Gfx_SetTransform();
         if ( m_show_mouse && m_mouse_sprite != 0 )

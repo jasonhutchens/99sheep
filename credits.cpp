@@ -116,7 +116,7 @@ Credits::render()
     ViewPort * vp( Engine::vp() );
     vp->setTransform();
 
-    Engine::instance()->setColour( 0xFF555555 );
+    setColour( 0xFF555555 );
 
     hgeFont * font( rm->GetFont( "menu" ) );
 

@@ -3,6 +3,8 @@
 #ifndef ArseContext
 #define ArseContext
 
+#include <hge.h>
+
 class Entity;
 
 #pragma once
@@ -26,9 +28,12 @@ class Context
     virtual void fini() = 0;
     virtual bool update( float dt ) = 0;
     virtual void render() = 0;
+    virtual DWORD getColour();
+    virtual void setColour( DWORD colour );
 
   private:
     bool m_handles_collisions;
+    DWORD m_colour;
 };
 
 #endif

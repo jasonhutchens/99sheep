@@ -59,7 +59,7 @@ Splash::render()
     int width( Engine::hge()->System_GetState( HGE_SCREENWIDTH ) );
     int height( Engine::hge()->System_GetState( HGE_SCREENHEIGHT ) );
 
-    Engine::instance()->setColour( 0xFFFFFFFF );
+    setColour( 0xFFFFFFFF );
     if ( m_timer > 2.0f )
     {
         sprite = rm->GetSprite( "publisher" );

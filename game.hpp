@@ -42,6 +42,7 @@ class Game : public Context
 	float m_timeRemaining;
 	int m_score;
 	float m_gameOutTimer;
+    bool m_black;
 };
 
 #endif

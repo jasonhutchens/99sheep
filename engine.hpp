@@ -84,7 +84,6 @@ class Engine : public b2BoundaryListener, public b2ContactListener,
     void init();
     void switchContext( EngineState state );
     Context * getContext();
-    void setColour( DWORD colour );
     void showMouse();
     void setMouse( const char * name );
     void hideMouse();
@@ -119,7 +118,6 @@ class Engine : public b2BoundaryListener, public b2ContactListener,
     ViewPort * m_vp;
     EntityManager * m_em;
 	ClumpManager* m_cm;
-    DWORD m_colour;
     DebugDraw * m_dd;
     hgeSprite * m_overlay;
     std::vector< Context * > m_contexts;
