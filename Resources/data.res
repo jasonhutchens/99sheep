@@ -34,9 +34,9 @@ Texture cursor
 {
     filename=cursor.png
 }
-Texture fujin
+Texture white_ship
 {
-    filename=fujin.png
+    filename=white_ship.png
 }
 Texture fujin_suck
 {
@@ -124,11 +124,11 @@ Sprite cursor
     rect=0,0,32,32
     hotspot=16,16
 }
-Sprite fujin
+Sprite white_ship
 {
-    texture=fujin
-    rect=0,0,256,256
-    hotspot=128,128
+    texture=white_ship
+    rect=0,0,32,32
+    hotspot=16,16
 }
 Sprite fujin_suck
 {

@@ -104,13 +104,14 @@ Game::init()
     m_fujin = static_cast< Fujin * >( Engine::em()->factory( Fujin::TYPE ) );
     b2Vec2 position( 0.0f, 0.0f );
     float angle( 0.0f );
-    m_fujin->setSprite( "fujin" );
+    m_fujin->setSprite( "white_ship" );
     m_fujin->setScale( FUJIN / ZOOM[m_zoom] );
     m_fujin->init();
     m_fujin->getBody()->SetXForm( position, angle );
     m_fujin->setTargetScale( FUJIN / ZOOM[m_zoom] );
     m_fujin->setZoom( m_zoom );
 
+    /*
     for ( int zoom = 0; zoom < 5; ++ zoom )
     {
 	for (int i = 0; i < 8; ++i)
@@ -126,6 +127,7 @@ Game::init()
         static_cast< Cloud * >( entity )->setZoom( zoom );
 	}
     }
+    */
 
     _initArena();
 }
@@ -257,8 +259,6 @@ Game::render()
 	
     vp->setTransform();
 
-    rm->GetSprite( "polluted" )->RenderEx( 0.0f, 0.0f, 0.0f, 0.8f );
-	
     std::vector< Entity * > entities;
     for ( b2Body * body( Engine::b2d()->GetBodyList() ); body != NULL;
           body = body->GetNext() )

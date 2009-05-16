@@ -192,10 +192,6 @@ Fujin::doUpdate( float dt )
     b2Vec2 acceleration( 0.0f, 0.0f );
     float power( 0.0f );
 
-    if ( m_isAsleep )
-    {
-        m_sprite = Engine::rm()->GetSprite( "fujin_sleep" );
-    }
     if ( Engine::instance()->isPaused() || m_isAsleep )
     {
 		Engine::instance()->hideMouse();
@@ -326,18 +322,6 @@ Fujin::doUpdate( float dt )
             Engine::instance()->hge()->Channel_Stop( m_channel );
             m_channel = 0;
         }
-		if ( m_isAsleep )
-		{
-			m_sprite = Engine::rm()->GetSprite( "fujin_sleep" );
-		}
-        else if ( m_isSick )
-        {
-            m_sprite = Engine::rm()->GetSprite( "fujin_sick" );
-        }
-        else
-        {
-            m_sprite = Engine::rm()->GetSprite( "fujin" );
-        }
 	}
 
 	sleep->info.nEmission = 3;
@@ -413,15 +397,6 @@ float Fujin::lookAt( const b2Vec2& targetPoint )
 
 void Fujin::Blow( float power )
 {
-    if ( power > 0.0f )
-    {
-        m_sprite = Engine::rm()->GetSprite( "fujin_blow" );
-    }
-    else
-    {
-        m_sprite = Engine::rm()->GetSprite( "fujin_suck" );
-    }
-
     b2Vec2 position( m_body->GetPosition() );
 
 	m_AABB.lowerBound= b2Vec2(position.x-200.0f*m_scale,

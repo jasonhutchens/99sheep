@@ -716,7 +716,7 @@ Engine::_initGraphics()
     m_hge->System_SetState( HGE_FRAMEFUNC, s_update );
     m_hge->System_SetState( HGE_RENDERFUNC, s_render );
     m_hge->System_SetState( HGE_EXITFUNC, s_exit );
-    m_hge->System_SetState( HGE_TITLE, "+++ B R O W N | C L O U D v1.2 +++" );
+    m_hge->System_SetState( HGE_TITLE, "+++ 9 9 S H E E P v1.0 +++" );
     m_hge->System_SetState( HGE_ICON, MAKEINTRESOURCE( IDI_ICON1 ) );
     m_hge->System_SetState( HGE_SCREENBPP, 32 );
     m_hge->System_SetState( HGE_USESOUND, true );
