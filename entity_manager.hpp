@@ -53,6 +53,7 @@ class EntityManager
     std::vector< Entity * > m_entities;
     std::map< sqlite_int64, hgeSprite * > m_sprites;
     std::map< std::string, sqlite_int64 > m_names;
+    std::vector< Entity * > m_new_entities;
 };
 
 #endif

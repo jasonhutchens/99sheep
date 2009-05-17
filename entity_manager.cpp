@@ -15,7 +15,8 @@ EntityManager::EntityManager()
     m_registry(),
     m_entities(),
     m_sprites(),
-    m_names()
+    m_names(),
+    m_new_entities()
 {
 }
 
@@ -40,6 +41,11 @@ EntityManager::update( float dt )
     {
         ( * i )->update( dt );
     }
+    while ( m_new_entities.size() > 0 )
+    {
+        m_entities.push_back( m_new_entities.back() );
+		m_new_entities.pop_back();
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -50,6 +56,11 @@ EntityManager::fini()
     {
         delete m_entities.back();
         m_entities.pop_back();
+    }
+    while ( m_new_entities.size() > 0 )
+    {
+        delete m_new_entities.back();
+        m_new_entities.pop_back();
     }
     m_registry.clear();
     m_sprites.clear();
@@ -105,7 +116,7 @@ EntityManager::factory( unsigned int type, bool add )
     entity->setType( type );
     if ( add )
     {
-        m_entities.push_back( entity );
+        m_new_entities.push_back( entity );
     }
     return entity;
 }

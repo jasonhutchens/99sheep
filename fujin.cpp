@@ -33,8 +33,7 @@ Fujin::Fujin( float max_strength, float scale )
     m_channel( 0 ),
     m_suck( false ),
     m_target_scale( 0.0f ),
-    m_bullet_timer( 0.0f ),
-    m_bullets()
+    m_bullet_timer( 0.0f )
 {
 }
 
@@ -45,11 +44,6 @@ Fujin::~Fujin()
     {
         Engine::instance()->hge()->Channel_Stop( m_channel );
         m_channel = 0;
-    }
-    std::vector< Bullet * >::iterator i;
-    for ( i = m_bullets.begin(); i != m_bullets.end(); ++i )
-    {
-        delete * i;
     }
 	hgeParticleSystem * sleep( Engine::rm()->GetParticleSystem( "sleep" ) );
 	sleep->Stop();
@@ -268,7 +262,8 @@ Fujin::doUpdate( float dt )
         b2Vec2 velocity( 0.0f, 0.0f );
         velocity = 100000.0f * shoot;
         bullet->getBody()->SetLinearVelocity( velocity );
-        //m_bullets.push_back( bullet );
+        b2Vec2 position( m_body->GetPosition() );
+        bullet->getBody()->SetXForm( position, 0.0f );
     }
 
 	bool dead( acceleration.LengthSquared() < 0.1f );

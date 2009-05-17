@@ -63,7 +63,6 @@ class Fujin : public Entity, public Damageable
     bool m_suck;
     float m_target_scale;
     float m_bullet_timer;
-    std::vector< Bullet * > m_bullets;
 };
 
 #endif
