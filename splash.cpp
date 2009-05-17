@@ -39,7 +39,7 @@ Splash::fini()
 bool
 Splash::update( float dt )
 {
-    if ( m_timer > 4.0f )
+    if ( m_timer > 5.0f )
     {
         Engine::instance()->switchContext( STATE_MENU );
     }
@@ -60,17 +60,10 @@ Splash::render()
     int height( Engine::hge()->System_GetState( HGE_SCREENHEIGHT ) );
 
     setColour( 0xFFFFFFFF );
-    if ( m_timer > 2.0f )
-    {
-        sprite = rm->GetSprite( "publisher" );
-    }
-    else
-    {
-        sprite = rm->GetSprite( "developer" );
-    }
+    sprite = rm->GetSprite( "developer" );
 
     sprite->RenderEx( 0.5f * static_cast<float>( width ),
-                      0.5f * static_cast<float>( height ), 0.0f, 0.5f );
+                      0.5f * static_cast<float>( height ), 0.0f, 1.0f );
 }
 
 //==============================================================================

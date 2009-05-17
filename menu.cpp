@@ -103,6 +103,10 @@ Menu::render()
     m_gui->Render();
     float cx( 0.5f * vp->screen().x );
     rm->GetSprite( "title" )->Render( cx, 150.0f );
+
+    hgeFont * font( rm->GetFont( "menu" ) );
+    font->SetColor( 0xFFFFFFFF );
+    font->printf( cx, 200.0f, HGETEXT_CENTER, "A RocketHands Experiment by Lloyd Kranzky" );
 }
 
 //==============================================================================

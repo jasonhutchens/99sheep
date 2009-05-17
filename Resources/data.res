@@ -8,7 +8,7 @@ Texture publisher
 }
 Texture developer
 {
-    filename=Kranzky_Brothers_Logo.png
+    filename=rockethands.png
 }
 Texture murdoch
 {
@@ -97,8 +97,8 @@ Sprite publisher
 Sprite developer
 {
     texture=developer
-    rect=0,0,400,513
-    hotspot=200,260
+    rect=0,0,380,340
+    hotspot=190,170
 }
 Sprite murdoch
 {
