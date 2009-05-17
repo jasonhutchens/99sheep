@@ -33,7 +33,7 @@ namespace
         {
             return false;
         }
-        if ( left->getType() < right->getType() )
+        if ( left->getType() > right->getType() )
         {
             return true;
         }

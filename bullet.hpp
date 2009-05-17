@@ -44,6 +44,7 @@ class Bullet : public Entity, public Damageable
 	b2AABB m_AABB;
     HCHANNEL m_channel;
     float m_target_scale;
+    float m_lifetime;
 };
 
 #endif

@@ -47,6 +47,9 @@ class Entity
     void setBlack( bool black );
     bool getBlack() const;
 
+    void destroy();
+    bool isDestroyed() const;
+
   protected:
     Entity( const Entity & );
     Entity & operator=( const Entity & );
@@ -72,6 +75,7 @@ class Entity
     sqlite_int64 m_sprite_id;
     hgeSprite * m_sprite;
     bool m_black;
+    bool m_destroy;
 };
 
 #endif

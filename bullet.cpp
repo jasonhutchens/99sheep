@@ -20,7 +20,8 @@ Bullet::Bullet( float max_strength, float scale )
     Damageable( max_strength ),
     m_AABB(),
     m_channel( 0 ),
-    m_target_scale( 0.0f )
+    m_target_scale( 0.0f ),
+    m_lifetime( 0.0f )
 {
 }
 
@@ -87,10 +88,10 @@ Bullet::onSetScale()
         m_body->DestroyShape( shape );
     }
     b2CircleDef shapeDef;
-    shapeDef.radius = 0.5f * 0.7f * m_sprite->GetWidth() * m_scale;
-    shapeDef.density = 1.0f;
+    shapeDef.radius = 0.25f * 0.5f * 0.7f * m_sprite->GetWidth() * m_scale;
+    shapeDef.density = 100.0f;
     shapeDef.friction =0.0f;
-    shapeDef.restitution = 0.3f;
+    shapeDef.restitution = 0.9f;
     m_body->CreateShape( & shapeDef );
     m_body->SetMassFromShapes();
 }
@@ -103,7 +104,7 @@ Bullet::doInit()
     bodyDef.allowSleep = false;
     bodyDef.userData = static_cast< void * >( this );
     m_body = Engine::b2d()->CreateDynamicBody( & bodyDef );
-	m_body->m_linearDamping = 0.8f;
+	m_body->m_linearDamping = 0.2f;
 	m_AABB.lowerBound= b2Vec2(-2.0f,-2.0f);
 	m_AABB.upperBound= b2Vec2(2.0f,2.0f);
     onSetScale();
@@ -117,12 +118,22 @@ Bullet::doInit()
 
 	const Controller & pad( Engine::instance()->getController() );
 	Engine::instance()->setMouse("cursor");
+
+    m_lifetime = 0.0f;
 }
 
 //------------------------------------------------------------------------------
 void
 Bullet::doUpdate( float dt )
 {
+    m_lifetime += dt;
+
+    if ( m_lifetime > 2.0f )
+    {
+        destroy();
+        return;
+    }
+
     b2Vec2 velocity( m_body->GetLinearVelocity() );
     float angle = lookAt( velocity );
 

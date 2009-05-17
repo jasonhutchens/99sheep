@@ -20,7 +20,8 @@ Entity::Entity( float scale )
     m_aabb( 0 ),
     m_sprite_id( 0 ),
     m_sprite( 0 ),
-    m_black( true )
+    m_black( true ),
+    m_destroy( false )
 {
     m_aabb = new b2AABB();
 }
@@ -149,6 +150,20 @@ bool
 Entity::getBlack() const
 {
     return m_black;
+}
+
+//------------------------------------------------------------------------------
+void
+Entity::destroy()
+{
+    m_destroy = true;
+}
+
+//------------------------------------------------------------------------------
+bool
+Entity::isDestroyed() const
+{
+    return m_destroy;
 }
 
 //------------------------------------------------------------------------------

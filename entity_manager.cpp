@@ -36,10 +36,19 @@ EntityManager::init()
 void
 EntityManager::update( float dt )
 {
-    std::vector< Entity * >::iterator i;
-    for ( i = m_entities.begin(); i != m_entities.end(); ++i )
+    std::vector< Entity * >::iterator i( m_entities.begin() );
+    while ( i != m_entities.end() )
     {
         ( * i )->update( dt );
+        if ( ( * i )->isDestroyed() )
+        {
+            delete ( * i );
+            i = m_entities.erase( i );
+        }
+        else
+        {
+            ++i;
+        }
     }
     while ( m_new_entities.size() > 0 )
     {
