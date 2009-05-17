@@ -207,7 +207,14 @@ Fujin::doUpdate( float dt )
 		b2Vec2 position (m_body->GetPosition());
 		b2Vec2 mousePosition(mouse.getMousePos());
 		b2Vec2 newPos = mousePosition - position;
-		float angle = lookAt(newPos);
+
+        if ( Engine::hge()->Input_GetKeyState( HGEK_LBUTTON ) )
+        {
+            shoot = newPos;
+            shoot.y *= -1.0f;
+            shoot.Normalize();
+        }
+
 	}
 
     if ( Engine::instance()->getConfig().vibrate )
@@ -247,7 +254,7 @@ Fujin::doUpdate( float dt )
         b2Vec2 velocity( 0.0f, 0.0f );
         velocity = 80.0f * shoot;
         velocity.y *= -1.0f;
-        velocity += m_body->GetLinearVelocity();
+//      velocity += m_body->GetLinearVelocity();
         bullet->getBody()->SetLinearVelocity( velocity );
         b2Vec2 position( m_body->GetPosition() );
         bullet->getBody()->SetXForm( position, 0.0f );

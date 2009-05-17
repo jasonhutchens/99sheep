@@ -207,20 +207,18 @@ Game::update( float dt )
     else
     {
         if ( ( Engine::hge()->Input_KeyDown( HGEK_Q ) ||
-               hge->Input_GetMouseWheel() < 0 ) && m_zoom > 0 )
+               hge->Input_GetMouseWheel() < 0 ) )
         {
-            --m_zoom;
-            m_fujin->setTargetScale( FUJIN / ZOOM[m_zoom] );
-            m_fujin->setZoom( m_zoom );
-            hge->Effect_PlayEx( Engine::rm()->GetEffect( "up" ), 100 );
+            m_black = true;
+            setColour( 0xFFFFFFFF );
+            m_fujin->setBlack( true );
         }
         else if ( ( Engine::hge()->Input_KeyDown( HGEK_E ) ||
-                    hge->Input_GetMouseWheel() > 0 ) && m_zoom < 4 )
+                    hge->Input_GetMouseWheel() > 0 ) )
         {
-            ++m_zoom;
-            m_fujin->setTargetScale( FUJIN / ZOOM[m_zoom] );
-            m_fujin->setZoom( m_zoom );
-            hge->Effect_PlayEx( Engine::rm()->GetEffect( "down" ), 100 );
+            m_black = false;
+            setColour( 0xFF000000 );
+            m_fujin->setBlack( false );
         }
     }
 
