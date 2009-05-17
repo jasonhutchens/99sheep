@@ -33,8 +33,6 @@ Bullet::~Bullet()
         Engine::instance()->hge()->Channel_Stop( m_channel );
         m_channel = 0;
     }
-	hgeParticleSystem * sleep( Engine::rm()->GetParticleSystem( "sleep" ) );
-	sleep->Stop();
 }
 
 //------------------------------------------------------------------------------
@@ -112,9 +110,6 @@ Bullet::doInit()
     m_channel = 0;
     m_target_scale = 0.0f;
     m_zoom = 0;
-
-	Engine::rm()->GetParticleSystem( "breath" )->SetScale( m_scale );
-	Engine::rm()->GetParticleSystem( "sleep" )->SetScale( m_scale );
 
 	const Controller & pad( Engine::instance()->getController() );
 	Engine::instance()->setMouse("cursor");
