@@ -253,14 +253,22 @@ Fujin::doUpdate( float dt )
     }
     if ( shoot.LengthSquared() > 0.2f && m_bullet_timer <= 0.0f )
     {
-        m_bullet_timer = 0.1f;
+        m_bullet_timer = 0.05f;
         Bullet * bullet( static_cast< Bullet * >( Engine::em()->factory( Bullet::TYPE ) ) );
-        bullet->setSprite( "white_bullet" );
-        bullet->setScale( 1.0f );
+        if ( m_black )
+        {
+            bullet->setSprite( "black_bullet" );
+        }
+        else
+        {
+            bullet->setSprite( "white_bullet" );
+        }
+        bullet->setScale( m_scale );
         bullet->setBlack( m_black );
         bullet->init();
         b2Vec2 velocity( 0.0f, 0.0f );
-        velocity = 100000.0f * shoot;
+        velocity = 80.0f * shoot;
+        velocity.y *= -1.0f;
         bullet->getBody()->SetLinearVelocity( velocity );
         b2Vec2 position( m_body->GetPosition() );
         bullet->getBody()->SetXForm( position, 0.0f );
@@ -270,7 +278,7 @@ Fujin::doUpdate( float dt )
     acceleration.y *= -1.0f;
     b2Vec2 velocity( m_body->GetLinearVelocity() );
     float angle = lookAt( velocity );
-    velocity = 1000.0f * acceleration;
+    velocity = 40.0f * acceleration;
 	if ( dead )
 	{
 	    velocity *= 0.0f;

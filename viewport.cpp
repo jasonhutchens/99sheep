@@ -153,6 +153,8 @@ ViewPort::setTransform( float scale )
     {
         dy = miny;
     }
+    dx = 0.5f * m_screen.x;
+    dy = 0.5f * m_screen.y;
     Engine::hge()->Gfx_SetTransform( m_offset.x, m_offset.y, dx, dy,
                                      m_angle,
                                      scale * m_hscale, scale * m_vscale );

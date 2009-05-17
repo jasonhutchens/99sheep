@@ -102,13 +102,13 @@ Game::init()
     vp->bounds().x = 1280.0f;
     vp->bounds().y = 720.0f;
     vp->setAngle( 0.0f );
-    vp->setScale( ZOOM[m_zoom] );
+    vp->setScale( 10.0f );
 
     m_fujin = static_cast< Fujin * >( Engine::em()->factory( Fujin::TYPE ) );
     b2Vec2 position( 0.0f, 0.0f );
     float angle( 0.0f );
     m_fujin->setSprite( "white_ship" );
-    m_fujin->setScale( 1.0f );
+    m_fujin->setScale( 0.1f );
     m_fujin->init();
     m_fujin->getBody()->SetXForm( position, angle );
     m_fujin->setTargetScale( FUJIN / ZOOM[m_zoom] );
@@ -344,33 +344,33 @@ Game::_initArena()
         {
             case 0:
             {
-                dimensions.x = 1280.0f;
-                dimensions.y = 1.0f;
+                dimensions.x = 128.0f;
+                dimensions.y = 0.1f;
                 position.x = 0.0f;
-                position.y = -361.0f;
+                position.y = -36.1f;
                 break;
             }
             case 1:
             {
-                dimensions.x = 1.0f;
-                dimensions.y = 720.0f;
-                position.x = 641.0f;
+                dimensions.x = 0.1f;
+                dimensions.y = 72.0f;
+                position.x = 64.1f;
                 position.y = 0.0f;
                 break;
             }
             case 2:
             {
-                dimensions.x = 1280.0f;
-                dimensions.y = 1.0f;
+                dimensions.x = 128.0f;
+                dimensions.y = 0.1f;
                 position.x = 0.0f;
-                position.y = 361.0f;
+                position.y = 36.1f;
                 break;
             }
             case 3:
             {
-                dimensions.x = 1.0f;
-                dimensions.y = 720.0f;
-                position.x = -641.0f;
+                dimensions.x = 0.1f;
+                dimensions.y = 72.0f;
+                position.x = -64.1f;
                 position.y = 0.0f;
                 break;
             }
