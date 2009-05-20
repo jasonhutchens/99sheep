@@ -106,7 +106,7 @@ Cloud::doInit()
 
 	b2CircleDef shapeDef;
 	shapeDef.radius = 0.5f * 0.8f * m_sprite->GetWidth() * m_scale;
-	shapeDef.density = 1.0f;
+	shapeDef.density = 100.0f;
 	shapeDef.friction = 0.0f;
 	shapeDef.restitution = 0.7f;
 

@@ -38,16 +38,6 @@ namespace
         }
         return false;
     }
-
-    bool
-    equal( const Entity * left, const Entity * right )
-    {
-        if ( left->getZoom() == right->getZoom() )
-        {
-            return true;
-        }
-        return false;
-    }
 }
 
 //==============================================================================
@@ -281,12 +271,16 @@ Game::shouldCollide( Entity * left, Entity * right )
         return true;
     }
 
-    if ( equal( left, right ) )
+    if ( left->getType() == Fujin::TYPE && right->getType() == Bullet::TYPE )
     {
-        return left->getType() == right->getType();
+        return false;
+    }
+    if ( left->getType() == Bullet::TYPE && right->getType() == Fujin::TYPE )
+    {
+        return false;
     }
 
-    return false;
+    return true;
 }
 
 //------------------------------------------------------------------------------

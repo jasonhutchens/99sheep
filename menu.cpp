@@ -114,7 +114,7 @@ Menu::render()
     hgeFont * font( rm->GetFont( "menu" ) );
     font->SetColor( 0xFFFFFFFF );
     font->printf( cx, 150.0f, HGETEXT_CENTER, "A RocketHands Experiment by Lloyd Kranzky" );
-    font->printf( cx, 650.0f, HGETEXT_CENTER, "Copyright (c) 2009 RocketHands Pty. Ltd." );
+    font->printf( cx, 650.0f, HGETEXT_CENTER, "Copyright (c) 2009 RocketHands Pty. Ltd.  All rights reserved." );
 }
 
 //==============================================================================

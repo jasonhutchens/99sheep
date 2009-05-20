@@ -41,7 +41,6 @@ class Bullet : public Entity, public Damageable
     virtual void initFromQuery( Query & query );
     float lookAt(const b2Vec2& targetPoint);
 
-	b2AABB m_AABB;
     HCHANNEL m_channel;
     float m_target_scale;
     float m_lifetime;
