@@ -152,7 +152,6 @@ Game::fini()
 bool
 Game::update( float dt )
 {
-	m_timeRemaining -= dt;
     const Controller & pad( Engine::instance()->getController() );
     HGE * hge( Engine::hge() );
     ViewPort * vp( Engine::vp() );
@@ -303,8 +302,6 @@ Game::render()
     {
 	    font->SetColor( 0xFFFFFFFF );
     }
-
-	font->printf( vp->screen().x * 0.5f, vp->screen().y - 30.0f, HGETEXT_CENTER, timeRemainingText );
 
     vp->setTransform();
 }

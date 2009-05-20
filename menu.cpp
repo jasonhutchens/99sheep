@@ -38,10 +38,11 @@ Menu::init()
     m_font = rm->GetFont( "menu" );
     m_gui = new hgeGUI();
     float cx( 0.5f * vp->screen().x );
-    float cy( 0.5f * vp->screen().y );
+    float cy( 0.5f * vp->screen().y - 70 );
     m_gui->AddCtrl( new MenuItem( CTRL_START, cx, cy + 30, "Start", m_font ) );
-    m_gui->AddCtrl( new MenuItem( CTRL_SCORE, cx, cy + 90, label, m_font ) );
-    m_gui->AddCtrl( new MenuItem( CTRL_EXIT, cx, cy + 150, "Exit", m_font ) );
+    m_gui->AddCtrl( new MenuItem( CTRL_SCORE, cx, cy + 80, label, m_font ) );
+    m_gui->AddCtrl( new MenuItem( CTRL_HOME, cx, cy + 130, "Home Page", m_font ) );
+    m_gui->AddCtrl( new MenuItem( CTRL_EXIT, cx, cy + 200, "Exit", m_font ) );
     m_gui->SetNavMode( HGEGUI_UPDOWN );
     m_gui->SetFocus( Engine::instance()->getConfig().menu );
     m_gui->Enter();
@@ -53,6 +54,7 @@ Menu::fini()
 {
     m_gui->DelCtrl( CTRL_START );
     m_gui->DelCtrl( CTRL_SCORE );
+    m_gui->DelCtrl( CTRL_HOME );
     m_gui->DelCtrl( CTRL_EXIT );
     delete m_gui;
     m_gui = 0;
@@ -72,7 +74,7 @@ Menu::update( float dt )
     }
 
     switch ( static_cast< Control >( engine->updateGUI( dt, m_gui,
-                                     engine->getConfig().menu, 3 ) ) )
+                                     engine->getConfig().menu, 4 ) ) )
     {
         case CTRL_START:
         {
@@ -82,6 +84,11 @@ Menu::update( float dt )
         case CTRL_SCORE:
         {
             Engine::instance()->switchContext( STATE_SCORE );
+            break;
+        }
+        case CTRL_HOME:
+        {
+            hge->System_Launch( "http://rockethands.com/node/43" );
             break;
         }
         case CTRL_EXIT:
@@ -102,11 +109,12 @@ Menu::render()
 
     m_gui->Render();
     float cx( 0.5f * vp->screen().x );
-    rm->GetSprite( "title" )->Render( cx, 150.0f );
+    rm->GetSprite( "title" )->Render( cx, 100.0f );
 
     hgeFont * font( rm->GetFont( "menu" ) );
     font->SetColor( 0xFFFFFFFF );
-    font->printf( cx, 200.0f, HGETEXT_CENTER, "A RocketHands Experiment by Lloyd Kranzky" );
+    font->printf( cx, 150.0f, HGETEXT_CENTER, "A RocketHands Experiment by Lloyd Kranzky" );
+    font->printf( cx, 650.0f, HGETEXT_CENTER, "Copyright (c) 2009 RocketHands Pty. Ltd." );
 }
 
 //==============================================================================
