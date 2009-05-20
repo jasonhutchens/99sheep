@@ -202,10 +202,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\clump_manager.hpp"
-				>
-			</File>
-			<File
 				RelativePath=".\config.hpp"
 				>
 			</File>
@@ -301,10 +297,6 @@
 			</File>
 			<File
 				RelativePath=".\cloud.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\clump_manager.cpp"
 				>
 			</File>
 			<File

@@ -4,7 +4,6 @@
 #include <engine.hpp>
 #include <entity.hpp>
 #include <entity_manager.hpp>
-#include <clump_manager.hpp>
 #include <viewport.hpp>
 #include <fujin.hpp>
 #include <bullet.hpp>
@@ -93,7 +92,6 @@ Game::init()
 	m_timeRemaining = 300;
 	m_score = 0;
     Engine::em()->init();
-	Engine::cm()->init();
 
     vp->offset().x = 0.0f;
     vp->offset().y = 0.0f;
@@ -117,23 +115,17 @@ Game::init()
     setColour( 0xFFFFFFFF );
     m_fujin->setBlack( true );
 
-    /*
-    for ( int zoom = 0; zoom < 5; ++ zoom )
-    {
-	for (int i = 0; i < 8; ++i)
+	for (int i = 0; i < 3; ++i)
 	{
 		Entity* entity = Engine::em()->factory( Cloud::TYPE );
-		b2Vec2 position( Engine::hge()->Random_Float( -400.0f, 400.0f),
-                         Engine::hge()->Random_Float( -300.0f, 300.0f) );
+		b2Vec2 position( Engine::hge()->Random_Float( -600.0f, 600.0f),
+                         Engine::hge()->Random_Float( -350.0f, 350.0f) );
 		float angle( Engine::hge()->Random_Float( -7.0f, 7.0f) );
-		entity->setSprite( "silver" );
-		entity->setScale( 1.0f / ZOOM[zoom] );
+		entity->setSprite( "black_sheep_64" );
+		entity->setScale( 1.0f );
 		entity->init();
 		entity->getBody()->SetXForm( position, angle );
-        static_cast< Cloud * >( entity )->setZoom( zoom );
 	}
-    }
-    */
 
     _initArena();
 }
@@ -144,7 +136,6 @@ Game::fini()
 {
     notifyOnCollision( false );
 
-    Engine::cm()->fini();
 	Engine::em()->fini();
 }
 
@@ -158,30 +149,10 @@ Game::update( float dt )
 
     if ( m_gameOutTimer <= 0 && m_timeRemaining <=0)
     {
-        Engine::instance()->switchContext( STATE_SCORE );
-        Context * context( Engine::instance()->getContext() );
-		static_cast< Score * >( context )->setValue( static_cast<int>(m_score * Engine::cm()->getClumpMultiplier()) );
         return false;
     }
-	else if(m_timeRemaining <=0 &&  !m_fujin->isAsleep()  && m_gameOutTimer <=0)
-	{
-		m_fujin->setAsleep(true);
-	}
-	if(Engine::cm()->isTopClusterFull() && !m_fujin->isAsleep())
-	{
-		m_score += (int)(m_timeRemaining *10);
-		if( m_timeRemaining > 20)
-			m_timeRemaining = 20;
-		m_fujin->setAsleep(true);
-		m_gameOutTimer = 0;
-		Engine::cm()->startClearingClump(m_timeRemaining - 1);
-	}
 
-	Engine::cm()->update( dt );
     Engine::em()->update( dt );
-
-	updateProgressData();
-	m_score += Engine::cm()->getClumpPoints();
 
     if ( Engine::instance()->isPaused() )
     {
@@ -249,12 +220,6 @@ Game::render()
 	b2Vec2 scoreTextLocation(0,10);
 	char timeRemainingText[10];
 	sprintf_s(timeRemainingText,"%d:%02d",(int)m_timeRemaining/60,(int)(m_timeRemaining)%60);
-
-	char scoreText[25];
-	sprintf_s(scoreText,"Score: %5d",m_score);
-
-	char multiplierText[25];
-	sprintf_s(multiplierText,"Multiplier: x%2.02f",Engine::cm()->getClumpMultiplier());
 
     ViewPort * vp( Engine::vp() );
 	
@@ -377,64 +342,4 @@ Game::_initArena()
         girder->init();
         girder->getBody()->SetXForm( position, 0.0f );
     }
-}
-
-//------------------------------------------------------------------------------
-void Game::updateProgressData()
-{
-	//This whole function is fairly horrible. Why not gloss over this and have
-	//a look at something a bit nicer? :o)
-
-	//get all the entities that are at the same level as the player
-	std::vector< Cloud * > entities;
-    for ( b2Body * body( Engine::b2d()->GetBodyList() ); body != NULL;
-          body = body->GetNext() )
-    {
-        Entity * entity( static_cast< Entity * >( body->GetUserData() ) );
-        if ( entity && entity->getType() == Cloud::TYPE && equal(entity, m_fujin))
-        {
-			Cloud* cloud =  static_cast<Cloud*>(entity);
-			if (cloud->isInWorld())
-				entities.push_back(cloud);
-        }
-	}
-
-	int numClouds = entities.size();
-
-	int looseEntities = 0;
-	std::vector< Cloud * >::iterator i;
-	std::set< Clump* > uniqueClumps;
-
-	//find out all the entities that are not in a clump, and get a reference to
-	//each clump that has some of these level entities in it
-	for ( i = entities.begin(); i != entities.end(); ++i )
-	{
-		Clump* clump = (*i)->getClump();
-		if (clump == NULL)
-			++looseEntities;
-		else
-		{
-			uniqueClumps.insert(clump);
-		}
-	}
-
-	m_progress.clear();
-
-	std::set< Clump * >::iterator iter;
-	for (iter = uniqueClumps.begin(); iter != uniqueClumps.end(); ++iter)
-	{
-		Clump* clump = (*iter);
-		m_progress.push_back(clump->getClouds()->size());
-	}
-
-	for (int i = 0; i < looseEntities; ++i)
-	{
-		m_progress.push_back(1);
-	}
-
-	//m_progress now will have a bunch of numbers in it, with each number being either 
-	//the size of a clump, or a 1 for cloud not in a clump
-
-	using namespace std;
-	m_progress.sort( greater<int>( ) );		//sort by clump size
 }

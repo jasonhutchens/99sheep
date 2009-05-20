@@ -33,7 +33,6 @@ class Game : public Context
 
   private:
     void _initArena();
-	void updateProgressData();
 
 	std::list<int> m_progress;
     float m_last_zoom;

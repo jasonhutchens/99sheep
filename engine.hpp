@@ -23,7 +23,6 @@ class DebugDraw;
 class Context;
 class ViewPort;
 class EntityManager;
-class ClumpManager;
 
 //------------------------------------------------------------------------------
 enum EngineState
@@ -55,7 +54,6 @@ class Engine : public b2BoundaryListener, public b2ContactListener,
     static b2World * b2d();
     static ViewPort * vp();
     static EntityManager * em();
-	static ClumpManager * cm();
     static hgeResourceManager * rm();
     static hgeParticleManager * pm();
     static DebugDraw * dd();
@@ -117,7 +115,6 @@ class Engine : public b2BoundaryListener, public b2ContactListener,
     b2World * m_b2d;
     ViewPort * m_vp;
     EntityManager * m_em;
-	ClumpManager* m_cm;
     DebugDraw * m_dd;
     hgeSprite * m_overlay;
     std::vector< Context * > m_contexts;

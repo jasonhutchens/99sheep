@@ -24,14 +24,7 @@ Fujin::Fujin( float max_strength, float scale )
     :
     Entity( scale ),
     Damageable( max_strength ),
-    m_AABB(),
-	m_suckedClouds(),
-	m_timeToNextCloudBlowOut(0.1f),
-    m_isBlowing(false),
-    m_isSick( false ),
-    m_isAsleep( false ),
     m_channel( 0 ),
-    m_suck( false ),
     m_target_scale( 0.0f ),
     m_bullet_timer( 0.0f )
 {
@@ -63,34 +56,6 @@ Fujin::persistToDatabase()
                                                         m_body->GetPosition().y,
                                                         m_body->GetAngle(),
                                                         m_scale, m_sprite_id );
-}
-
-//------------------------------------------------------------------------------
-bool
-Fujin::isSick()
-{
-    return m_isSick;
-}
-
-//------------------------------------------------------------------------------
-void
-Fujin::setSick( bool sick )
-{
-    m_isSick = sick;
-}
-
-//------------------------------------------------------------------------------
-bool
-Fujin::isAsleep()
-{
-    return m_isAsleep;
-}
-
-//------------------------------------------------------------------------------
-void
-Fujin::setAsleep( bool bsleep )
-{
-    m_isAsleep = bsleep;
 }
 
 //------------------------------------------------------------------------------
@@ -143,12 +108,8 @@ Fujin::doInit()
     bodyDef.userData = static_cast< void * >( this );
     m_body = Engine::b2d()->CreateDynamicBody( & bodyDef );
 	m_body->m_linearDamping = 0.8f;
-	m_AABB.lowerBound= b2Vec2(-2.0f,-2.0f);
-	m_AABB.upperBound= b2Vec2(2.0f,2.0f);
     onSetScale();
 
-    m_isSick = false;
-    m_isAsleep = false;
     m_channel = 0;
     m_target_scale = 0.0f;
     m_zoom = 0;
@@ -161,9 +122,6 @@ Fujin::doInit()
 void
 Fujin::doUpdate( float dt )
 {
-	if (m_timeToNextCloudBlowOut > 0.0f)
-		m_timeToNextCloudBlowOut -= dt;
-
     const Controller & pad( Engine::instance()->getController() );
 	const Mouse &mouse(Engine::instance()->getMouse());
 	
@@ -172,7 +130,7 @@ Fujin::doUpdate( float dt )
     b2Vec2 acceleration( 0.0f, 0.0f );
     b2Vec2 shoot( 0.0f, 0.0f );
 
-    if ( Engine::instance()->isPaused() || m_isAsleep )
+    if ( Engine::instance()->isPaused() )
     {
 		Engine::instance()->hideMouse();
     }
@@ -219,16 +177,7 @@ Fujin::doUpdate( float dt )
 
     if ( Engine::instance()->getConfig().vibrate )
     {
-        float force( static_cast< float >( m_suckedClouds.size() ) / 40.0f );
-        if ( force > 1.0f )
-        {
-            force = 1.0f;
-        }
-        Engine::instance()->getController().rumble( force, force, 0.1f );
-    }
-	if (m_suckedClouds.size() == 0)
-    {
-        m_isSick = false;
+        //Engine::instance()->getController().rumble( force, force, 0.1f );
     }
 
     m_bullet_timer -= dt;
@@ -338,136 +287,3 @@ float Fujin::lookAt( const b2Vec2& targetPoint )
 	return angle;
 }
 //==============================================================================
-
-
-void Fujin::Blow( float power )
-{
-    b2Vec2 position( m_body->GetPosition() );
-
-	m_AABB.lowerBound= b2Vec2(position.x-200.0f*m_scale,
-                              position.y-200.0f*m_scale);
-
-	m_AABB.upperBound= b2Vec2(position.x+200.0f*m_scale,
-                              position.y+200.0f*m_scale);
-
-	const int32 k_bufferSize = 100;
-
-	b2Shape *buffer[k_bufferSize];
-
-	int32 count = Engine::b2d()->Query(m_AABB, buffer, k_bufferSize);
-
-	for ( int32 i = 0; i < count; ++i )
-	{
-        Entity * entity( static_cast< Entity * >(
-            buffer[i]->GetBody()->GetUserData() ) );
-        if ( entity->getType() != Cloud::TYPE )
-        {
-            continue;
-        }
-        if ( m_zoom != entity->getZoom() )
-        {
-            continue;
-        }
-
-        b2Vec2 vertical( 0.0f, 1.0f );
-        b2Mat22 rotation( m_body->GetAngle() );
-        b2Vec2 heading( b2Mul( rotation, vertical ) );
-
-        b2Vec2 offset( entity->getBody()->GetPosition() -
-                       m_body->GetPosition() );
-
-        float length( offset.Normalize() );
-
-        float dot( b2Dot( offset, heading ) );
-
-		if ( dot < 0.0f || length < 1.0f )
-        {
-            continue;
-        }
-
-        float ratio( 1.0f - ( length * length ) /
-			                ( 200.0f * 200.0f * m_scale * m_scale ) );
-
-		if ( ratio <= 0.1f )
-		{
-			ratio = 0.1f;
-		}
-
-        float force( 1000000.0f * m_scale * m_scale * dot * ratio * power );
-
-		offset *= force;
-
-        entity->getBody()->WakeUp();
-        entity->getBody()->ApplyForce( offset,
-                                       entity->getBody()->GetPosition() );
-	}
-}
-
-//------------------------------------------------------------------------------
-void Fujin::suckUpClouds()
-{
-	EntityManager* em = Engine::em();
-	std::vector<Entity*> clouds = em->getEntities(Cloud::TYPE);
-	std::vector<Entity*>::iterator i;
-
-	for (i = clouds.begin(); i != clouds.end(); ++i)
-	{
-		Cloud* cloud = static_cast<Cloud*>(*i);
-		b2Vec2 meToCloud = cloud->getBody()->GetPosition() - getBody()->GetPosition();
-		if ( cloud->getZoom() == m_zoom &&
-             meToCloud.Length() < 40.0f * m_scale )
-		{
-			bool alreadySucked = false;
-			std::vector<Cloud*>::iterator suckedIter;
-			for (suckedIter = m_suckedClouds.begin(); suckedIter != m_suckedClouds.end(); ++suckedIter)
-			{
-				if ((*suckedIter) == cloud)
-                {
-					alreadySucked = true;
-                    break;
-                }
-			}
-
-			if (!alreadySucked)
-			{
-	            m_timeToNextCloudBlowOut = 1.0f;
-				cloud->removeFromClump(true);
-				cloud->removeFromWorld();
-				m_suckedClouds.push_back(cloud);
-                Engine::hge()->Effect_PlayEx( Engine::rm()->GetEffect( "eat" ), 20 );
-			}
-		}
-	}
-
-	if (m_suckedClouds.size() > 0)
-		setSick(true);
-
-}
-
-//------------------------------------------------------------------------------
-void Fujin::blowOutClouds()
-{
-	if (m_timeToNextCloudBlowOut <= 0.0f)
-	{
-		if (m_suckedClouds.size() > 0)
-		{
-			Cloud* cloud = m_suckedClouds.back();
-
-			b2Vec2 position( m_body->GetPosition() );
-			b2Vec2 direction( 0.3f + Engine::hge()->Random_Float( -0.1f, 0.1f ), 1.0f );
-			direction = b2Mul( m_body->GetXForm().R, -direction );
-			position = position - 64.0f * m_scale * direction;
-
-			cloud->addToWorld(position, getBody()->GetAngle(), m_target_scale);
-	        cloud->getBody()->SetAngularVelocity( Engine::hge()->Random_Float( -10.0f, 10.0f ) );
-            cloud->getBody()->SetLinearVelocity( 0.5f * m_body->GetLinearVelocity() );
-			m_suckedClouds.pop_back();
-
-            Engine::hge()->Effect_PlayEx( Engine::rm()->GetEffect( "spit" ), 20 );
-		    m_timeToNextCloudBlowOut = BLOW[cloud->getZoom()];
-		}
-	}
-
-	if (m_suckedClouds.size() == 0)
-		setSick(false);
-}
