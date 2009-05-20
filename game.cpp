@@ -39,15 +39,15 @@ namespace
         return false;
     }
 
-	bool
+    bool
     equal( const Entity * left, const Entity * right )
-	{
-		if ( left->getZoom() == right->getZoom() )
+    {
+        if ( left->getZoom() == right->getZoom() )
         {
-			return true;
+            return true;
         }
-		return false;
-	}
+        return false;
+    }
 }
 
 //==============================================================================
@@ -57,7 +57,7 @@ Game::Game()
     m_last_zoom( 1.0f ),
     m_zoom( 0 ),
     m_fujin( 0 ),
-	m_gameOutTimer(0),
+    m_gameOutTimer(0),
     m_black( true )
 {
 }
@@ -89,8 +89,8 @@ Game::init()
     m_gameOutTimer = 0;
     m_zoom = 0;
 
-	m_timeRemaining = 300;
-	m_score = 0;
+    m_timeRemaining = 300;
+    m_score = 0;
     Engine::em()->init();
 
     vp->offset().x = 0.0f;
@@ -115,17 +115,18 @@ Game::init()
     setColour( 0xFFFFFFFF );
     m_fujin->setBlack( true );
 
-	for (int i = 0; i < 3; ++i)
-	{
-		Entity* entity = Engine::em()->factory( Cloud::TYPE );
-		b2Vec2 position( Engine::hge()->Random_Float( -600.0f, 600.0f),
-                         Engine::hge()->Random_Float( -350.0f, 350.0f) );
-		float angle( Engine::hge()->Random_Float( -7.0f, 7.0f) );
-		entity->setSprite( "black_sheep_64" );
-		entity->setScale( 1.0f );
-		entity->init();
-		entity->getBody()->SetXForm( position, angle );
-	}
+    for (int i = 0; i < 8; ++i)
+    {
+        Entity* entity = Engine::em()->factory( Cloud::TYPE );
+        b2Vec2 position( Engine::hge()->Random_Float( -60.0f, 60.0f),
+                         Engine::hge()->Random_Float( -35.0f, 35.0f) );
+        float angle( Engine::hge()->Random_Float( -7.0f, 7.0f) );
+        static_cast< Cloud * >( entity )->setSize( Engine::hge()->Random_Int( 0, 3 ) );
+        entity->setBlack( Engine::hge()->Random_Int( 0, 1 ) == 0 );
+        entity->setScale( 0.1f );
+        entity->init();
+        entity->getBody()->SetXForm( position, angle );
+    }
 
     _initArena();
 }
@@ -136,7 +137,7 @@ Game::fini()
 {
     notifyOnCollision( false );
 
-	Engine::em()->fini();
+    Engine::em()->fini();
 }
 
 //------------------------------------------------------------------------------
@@ -214,15 +215,15 @@ Game::update( float dt )
 void
 Game::render()
 {
-	hgeResourceManager * rm( Engine::rm() );
-	hgeFont* font = Engine::rm()->GetFont("menu");
-	b2Vec2 timeTextLocation (700,10);
-	b2Vec2 scoreTextLocation(0,10);
-	char timeRemainingText[10];
-	sprintf_s(timeRemainingText,"%d:%02d",(int)m_timeRemaining/60,(int)(m_timeRemaining)%60);
+    hgeResourceManager * rm( Engine::rm() );
+    hgeFont* font = Engine::rm()->GetFont("menu");
+    b2Vec2 timeTextLocation (700,10);
+    b2Vec2 scoreTextLocation(0,10);
+    char timeRemainingText[10];
+    sprintf_s(timeRemainingText,"%d:%02d",(int)m_timeRemaining/60,(int)(m_timeRemaining)%60);
 
     ViewPort * vp( Engine::vp() );
-	
+    
     vp->setTransform();
 
     std::vector< Entity * > entities;
@@ -245,27 +246,27 @@ Game::render()
         Entity * entity( * i );
         entity->render( scale );
     }
-	// render time remaining
-	Engine::hge()->Gfx_SetTransform();
+    // render time remaining
+    Engine::hge()->Gfx_SetTransform();
 
-	std::string progressText;
-	std::list<int>::iterator iter;
+    std::string progressText;
+    std::list<int>::iterator iter;
     for ( iter = m_progress.begin(); iter != m_progress.end(); ++iter )
-	{
-		for (int i = (*iter); i > 0; --i)
-		{
-			progressText.append("@");
-		}
-		progressText.append("  ");
-	}
+    {
+        for (int i = (*iter); i > 0; --i)
+        {
+            progressText.append("@");
+        }
+        progressText.append("  ");
+    }
 
     if ( m_black )
     {
-	    font->SetColor( 0xFF000000 );
+        font->SetColor( 0xFF000000 );
     }
     else
     {
-	    font->SetColor( 0xFFFFFFFF );
+        font->SetColor( 0xFFFFFFFF );
     }
 
     vp->setTransform();

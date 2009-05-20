@@ -22,6 +22,9 @@ class Cloud : public Entity
 
     virtual void persistToDatabase();
 
+    int getSize() const;
+    void setSize( int size );
+
     static void registerEntity();
 
   protected:
@@ -32,6 +35,9 @@ class Cloud : public Entity
     virtual void doUpdate( float dt );
     virtual void doRender( float scale );
     virtual void initFromQuery( Query & query );
+
+  private:
+    int m_size;
 };
 
 #endif

@@ -12,10 +12,27 @@
 #include <hgeparticle.h>
 #include <hgeresource.h>
 
+namespace
+{
+    const char * WHITE [] = {
+        "white_sheep_16",
+        "white_sheep_32",
+        "white_sheep_64",
+        "white_sheep_128",
+    };
+    const char * BLACK [] = {
+        "black_sheep_16",
+        "black_sheep_32",
+        "black_sheep_64",
+        "black_sheep_128",
+    };
+};
+
 //==============================================================================
 Cloud::Cloud( float scale )
     :
-    Entity( scale )
+    Entity( scale ),
+    m_size( 0 )
 {
 }
 
@@ -43,6 +60,20 @@ Cloud::persistToDatabase()
 }
 
 //------------------------------------------------------------------------------
+int
+Cloud::getSize() const
+{
+    return m_size;
+}
+
+//------------------------------------------------------------------------------
+void
+Cloud::setSize( int size )
+{
+    m_size = size;
+}
+
+//------------------------------------------------------------------------------
 // static:
 //------------------------------------------------------------------------------
 void
@@ -58,6 +89,15 @@ Cloud::registerEntity()
 void
 Cloud::doInit()
 {
+    if ( m_black )
+    {
+        m_sprite = Engine::rm()->GetSprite( BLACK[m_size] );
+    }
+    else
+    {
+        m_sprite = Engine::rm()->GetSprite( WHITE[m_size] );
+    }
+
     m_zoom = 0;
 
 	b2BodyDef bodyDef;
@@ -72,8 +112,8 @@ Cloud::doInit()
 
 	m_body->CreateShape(&shapeDef);
 	m_body->SetMassFromShapes();
-    m_body->m_linearDamping = 0.2f;
-    m_body->m_angularDamping = 0.5f;
+    m_body->m_linearDamping = 0.0f;
+    m_body->m_angularDamping = 0.0f;
     m_body->SetAngularVelocity( 0.0f );
     b2Vec2 velocity( 0.0f, 0.0f );
 }
@@ -82,6 +122,14 @@ Cloud::doInit()
 void
 Cloud::doUpdate( float dt )
 {
+    if ( m_black )
+    {
+        m_sprite = Engine::rm()->GetSprite( BLACK[m_size] );
+    }
+    else
+    {
+        m_sprite = Engine::rm()->GetSprite( WHITE[m_size] );
+    }
 }
 
 //------------------------------------------------------------------------------
