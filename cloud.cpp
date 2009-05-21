@@ -156,6 +156,24 @@ Cloud::doUpdate( float dt )
     {
         destroy();
     }
+    if ( isHealthy() && m_size < 4 )
+    {
+        Entity* entity = Engine::em()->factory( Cloud::TYPE );
+        if ( getBlack() )
+        {
+            entity->setBlack( 0 );
+        }
+        else
+        {
+            entity->setBlack( 1 );
+        }
+        entity->setScale( 0.1f );
+        static_cast< Cloud * >( entity )->setSize( m_size + 1 );
+        entity->init();
+        entity->getBody()->SetXForm( m_body->GetPosition(),
+                                     m_body->GetAngle() );
+        destroy(); 
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -165,6 +183,10 @@ Cloud::doRender( float scale )
     b2Vec2 position( m_body->GetPosition() );
     float angle( m_body->GetAngle() );
     m_sprite->RenderEx( position.x, position.y, angle, m_scale );
+    float offset( 12.0f * m_size );
+    b2Vec2 direction( 0.0f, offset );
+    direction = b2Mul( m_body->GetXForm().R, direction );
+    position = position + m_scale * direction;
     if ( getBlack() )
     {
         renderDamageable( position, m_scale, 0xFFFFFFFF );
