@@ -44,6 +44,10 @@ Fujin::~Fujin()
 void
 Fujin::collide( Entity * entity, b2ContactPoint * point )
 {
+    if ( entity->getType() == Cloud::TYPE && entity->getBlack() != getBlack() )
+    {
+        takeDamage( 1000.0f );
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -91,7 +95,7 @@ Fujin::onSetScale()
         m_body->DestroyShape( shape );
     }
     b2CircleDef shapeDef;
-    shapeDef.radius = 0.5f * 0.7f * m_sprite->GetWidth() * m_scale;
+    shapeDef.radius = 0.5f * 0.5f * m_sprite->GetWidth() * m_scale;
     shapeDef.density = 1.0f;
     shapeDef.friction =0.0f;
     shapeDef.restitution = 0.3f;
@@ -129,6 +133,8 @@ Fujin::doUpdate( float dt )
 
     b2Vec2 acceleration( 0.0f, 0.0f );
     b2Vec2 shoot( 0.0f, 0.0f );
+
+    updateDamageable( dt );
 
     if ( Engine::instance()->isPaused() )
     {
@@ -245,7 +251,6 @@ Fujin::doRender( float scale )
     b2Vec2 position( m_body->GetPosition() );
     float angle( m_body->GetAngle() );
     m_sprite->RenderEx( position.x, position.y, angle, m_scale );
-    renderDamageable( position, m_scale );
 }
 
 //------------------------------------------------------------------------------

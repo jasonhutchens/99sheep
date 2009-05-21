@@ -40,7 +40,7 @@ EntityManager::update( float dt )
     while ( i != m_entities.end() )
     {
         ( * i )->update( dt );
-        if ( ( * i )->isDestroyed() )
+        if ( ( * i )->isGone() )
         {
             delete ( * i );
             i = m_entities.erase( i );

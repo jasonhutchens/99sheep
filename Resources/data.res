@@ -70,6 +70,10 @@ Font menu
 {
     filename=menu.fnt
 }
+Font tiny
+{
+    filename=tiny.fnt
+}
 Sprite title
 {
     texture=title

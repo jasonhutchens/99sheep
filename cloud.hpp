@@ -6,10 +6,11 @@
 #pragma once
 
 #include <entity.hpp>
+#include <damageable.hpp>
 #include <Box2D.h>
 
 //------------------------------------------------------------------------------
-class Cloud : public Entity
+class Cloud : public Entity, public Damageable
 {
   public:
     static const unsigned int TYPE = 2;

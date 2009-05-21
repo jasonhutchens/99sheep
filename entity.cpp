@@ -161,7 +161,7 @@ Entity::destroy()
 
 //------------------------------------------------------------------------------
 bool
-Entity::isDestroyed() const
+Entity::isGone() const
 {
     return m_destroy;
 }

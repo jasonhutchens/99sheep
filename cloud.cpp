@@ -1,6 +1,7 @@
 //==============================================================================
 
 #include <cloud.hpp>
+#include <bullet.hpp>
 #include <engine.hpp>
 #include <entity_manager.hpp>
 #include <game.hpp>
@@ -34,6 +35,7 @@ namespace
 Cloud::Cloud( float scale )
     :
     Entity( scale ),
+    Damageable( 99.0f ),
     m_size( 0 )
 {
 }
@@ -47,6 +49,19 @@ Cloud::~Cloud()
 void
 Cloud::collide( Entity * entity, b2ContactPoint * point )
 {
+    if ( entity->getType() != Bullet::TYPE )
+    {
+        return;
+    }
+    if ( entity->getBlack() != getBlack() )
+    {
+        takeDamage( 2.5f / static_cast< float >( m_size + 1 ) );
+    }
+    else
+    {
+        addStrength( 2.5f / static_cast< float >( m_size + 1 ) );
+    }
+    entity->destroy();
 }
 
 //------------------------------------------------------------------------------
@@ -116,14 +131,19 @@ Cloud::doInit()
 	m_body->SetMassFromShapes();
     m_body->m_linearDamping = 0.0f;
     m_body->m_angularDamping = 0.0f;
-    m_body->SetAngularVelocity( 0.0f );
-    b2Vec2 velocity( 0.0f, 0.0f );
+    float spin( 5.0f / static_cast<float>(m_size + 1.0f) );
+    m_body->SetAngularVelocity( Engine::hge()->Random_Float( -spin, spin ) );
+    float speed( 100.0f / static_cast<float>(m_size + 1.0f) );
+    b2Vec2 velocity( Engine::hge()->Random_Float( -speed, speed ),
+                     Engine::hge()->Random_Float( -speed, speed ) );
+    m_body->SetLinearVelocity( velocity );
 }
 
 //------------------------------------------------------------------------------
 void
 Cloud::doUpdate( float dt )
 {
+    updateDamageable( dt );
     if ( m_black )
     {
         m_sprite = Engine::rm()->GetSprite( BLACK[m_size] );
@@ -131,6 +151,10 @@ Cloud::doUpdate( float dt )
     else
     {
         m_sprite = Engine::rm()->GetSprite( WHITE[m_size] );
+    }
+    if ( isDestroyed() )
+    {
+        destroy();
     }
 }
 
@@ -141,6 +165,14 @@ Cloud::doRender( float scale )
     b2Vec2 position( m_body->GetPosition() );
     float angle( m_body->GetAngle() );
     m_sprite->RenderEx( position.x, position.y, angle, m_scale );
+    if ( getBlack() )
+    {
+        renderDamageable( position, m_scale, 0xFFFFFFFF );
+    }
+    else
+    {
+        renderDamageable( position, m_scale, 0xFF000000 );
+    }
 }
 
 //------------------------------------------------------------------------------

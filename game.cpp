@@ -105,17 +105,45 @@ Game::init()
     setColour( 0xFFFFFFFF );
     m_fujin->setBlack( true );
 
-    for (int i = 0; i < 8; ++i)
     {
-        Entity* entity = Engine::em()->factory( Cloud::TYPE );
-        b2Vec2 position( Engine::hge()->Random_Float( -60.0f, 60.0f),
-                         Engine::hge()->Random_Float( -35.0f, 35.0f) );
-        float angle( Engine::hge()->Random_Float( -7.0f, 7.0f) );
-        static_cast< Cloud * >( entity )->setSize( Engine::hge()->Random_Int( 0, 4 ) );
-        entity->setBlack( Engine::hge()->Random_Int( 0, 1 ) == 0 );
-        entity->setScale( 0.1f );
-        entity->init();
-        entity->getBody()->SetXForm( position, angle );
+    Entity* entity = Engine::em()->factory( Cloud::TYPE );
+    b2Vec2 position( -30.0f, -17.0f );
+    float angle( Engine::hge()->Random_Float( -7.0f, 7.0f) );
+    static_cast< Cloud * >( entity )->setSize( 2 );
+    entity->setBlack( 1 );
+    entity->setScale( 0.1f );
+    entity->init();
+    entity->getBody()->SetXForm( position, angle );
+    }
+    {
+    Entity* entity = Engine::em()->factory( Cloud::TYPE );
+    b2Vec2 position( 30.0f, -17.0f );
+    float angle( Engine::hge()->Random_Float( -7.0f, 7.0f) );
+    static_cast< Cloud * >( entity )->setSize( 2 );
+    entity->setBlack( 0 );
+    entity->setScale( 0.1f );
+    entity->init();
+    entity->getBody()->SetXForm( position, angle );
+    }
+    {
+    Entity* entity = Engine::em()->factory( Cloud::TYPE );
+    b2Vec2 position( 30.0f, 17.0f );
+    float angle( Engine::hge()->Random_Float( -7.0f, 7.0f) );
+    static_cast< Cloud * >( entity )->setSize( 2 );
+    entity->setBlack( 1 );
+    entity->setScale( 0.1f );
+    entity->init();
+    entity->getBody()->SetXForm( position, angle );
+    }
+    {
+    Entity* entity = Engine::em()->factory( Cloud::TYPE );
+    b2Vec2 position( -30.0f, 17.0f );
+    float angle( Engine::hge()->Random_Float( -7.0f, 7.0f) );
+    static_cast< Cloud * >( entity )->setSize( 2 );
+    entity->setBlack( 0 );
+    entity->setScale( 0.1f );
+    entity->init();
+    entity->getBody()->SetXForm( position, angle );
     }
 
     _initArena();
@@ -147,6 +175,12 @@ Game::update( float dt )
 
     if ( Engine::instance()->isPaused() )
     {
+        return false;
+    }
+
+    if ( m_fujin->isDestroyed() )
+    {
+        Engine::instance()->switchContext( STATE_SCORE );
         return false;
     }
 

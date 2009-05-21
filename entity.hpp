@@ -48,7 +48,7 @@ class Entity
     bool getBlack() const;
 
     void destroy();
-    bool isDestroyed() const;
+    bool isGone() const;
 
   protected:
     Entity( const Entity & );
