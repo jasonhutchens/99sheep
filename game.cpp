@@ -111,7 +111,7 @@ Game::init()
         b2Vec2 position( Engine::hge()->Random_Float( -60.0f, 60.0f),
                          Engine::hge()->Random_Float( -35.0f, 35.0f) );
         float angle( Engine::hge()->Random_Float( -7.0f, 7.0f) );
-        static_cast< Cloud * >( entity )->setSize( Engine::hge()->Random_Int( 0, 3 ) );
+        static_cast< Cloud * >( entity )->setSize( Engine::hge()->Random_Int( 0, 4 ) );
         entity->setBlack( Engine::hge()->Random_Int( 0, 1 ) == 0 );
         entity->setScale( 0.1f );
         entity->init();

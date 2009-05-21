@@ -696,13 +696,13 @@ Engine::_initGraphics()
     m_hge->System_SetState( HGE_FRAMEFUNC, s_update );
     m_hge->System_SetState( HGE_RENDERFUNC, s_render );
     m_hge->System_SetState( HGE_EXITFUNC, s_exit );
-    m_hge->System_SetState( HGE_TITLE, "+++ 9 9 S H E E P v0.2 +++" );
+    m_hge->System_SetState( HGE_TITLE, "+++ 9 9 S H E E P v0.3 +++" );
     m_hge->System_SetState( HGE_ICON, MAKEINTRESOURCE( IDI_ICON1 ) );
     m_hge->System_SetState( HGE_SCREENBPP, 32 );
     m_hge->System_SetState( HGE_USESOUND, true );
     m_hge->System_SetState( HGE_SHOWSPLASH, false );
     m_hge->System_SetState( HGE_FPS, HGEFPS_UNLIMITED );
-    m_hge->System_SetState( HGE_TEXTUREFILTER, false );
+    //m_hge->System_SetState( HGE_TEXTUREFILTER, false );
 
     m_config.init();
 

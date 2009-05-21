@@ -26,14 +26,6 @@ Texture black_bullet
 {
     filename=black_bullet.png
 }
-Texture white_sheep_16
-{
-    filename=white_sheep_16.png
-}
-Texture black_sheep_16
-{
-    filename=black_sheep_16.png
-}
 Texture white_sheep_32
 {
     filename=white_sheep_32.png
@@ -57,6 +49,22 @@ Texture white_sheep_128
 Texture black_sheep_128
 {
     filename=black_sheep_128.png
+}
+Texture white_sheep_256
+{
+    filename=white_sheep_256.png
+}
+Texture black_sheep_256
+{
+    filename=black_sheep_256.png
+}
+Texture white_sheep_512
+{
+    filename=white_sheep_512.png
+}
+Texture black_sheep_512
+{
+    filename=black_sheep_512.png
 }
 Font menu
 {
@@ -104,18 +112,6 @@ Sprite black_bullet
     rect=0,0,16,16
     hotspot=8,8
 }
-Sprite white_sheep_16
-{
-    texture=white_sheep_16
-    rect=0,0,16,16
-    hotspot=8,8
-}
-Sprite black_sheep_16
-{
-    texture=black_sheep_16
-    rect=0,0,16,16
-    hotspot=8,8
-}
 Sprite white_sheep_32
 {
     texture=white_sheep_32
@@ -151,6 +147,30 @@ Sprite black_sheep_128
     texture=black_sheep_128
     rect=0,0,128,128
     hotspot=64,64
+}
+Sprite white_sheep_256
+{
+    texture=white_sheep_256
+    rect=0,0,256,256
+    hotspot=128,128
+}
+Sprite black_sheep_256
+{
+    texture=black_sheep_256
+    rect=0,0,256,256
+    hotspot=128,128
+}
+Sprite white_sheep_512
+{
+    texture=white_sheep_512
+    rect=0,0,512,512
+    hotspot=256,256
+}
+Sprite black_sheep_512
+{
+    texture=black_sheep_512
+    rect=0,0,512,512
+    hotspot=256,256
 }
 Sound music
 {

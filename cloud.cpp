@@ -15,16 +15,18 @@
 namespace
 {
     const char * WHITE [] = {
-        "white_sheep_16",
         "white_sheep_32",
         "white_sheep_64",
         "white_sheep_128",
+        "white_sheep_256",
+        "white_sheep_512",
     };
     const char * BLACK [] = {
-        "black_sheep_16",
         "black_sheep_32",
         "black_sheep_64",
         "black_sheep_128",
+        "black_sheep_256",
+        "black_sheep_512",
     };
 };
 
@@ -105,7 +107,7 @@ Cloud::doInit()
 	m_body = Engine::b2d()->CreateDynamicBody(&bodyDef);
 
 	b2CircleDef shapeDef;
-	shapeDef.radius = 0.5f * 0.8f * m_sprite->GetWidth() * m_scale;
+	shapeDef.radius = 0.5f * 0.95f * m_sprite->GetWidth() * m_scale;
 	shapeDef.density = 100.0f;
 	shapeDef.friction = 0.0f;
 	shapeDef.restitution = 0.7f;
