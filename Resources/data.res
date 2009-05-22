@@ -95,26 +95,26 @@ Sprite cursor
 Sprite white_ship
 {
     texture=white_ship
-    rect=0,0,32,32
-    hotspot=16,16
+    rect=0,0,34,34
+    hotspot=17,17
 }
 Sprite black_ship
 {
     texture=black_ship
-    rect=0,0,32,32
-    hotspot=16,16
+    rect=0,0,34,34
+    hotspot=17,17
 }
 Sprite white_bullet
 {
     texture=white_bullet
-    rect=0,0,16,16
-    hotspot=8,8
+    rect=0,0,18,18
+    hotspot=9,9
 }
 Sprite black_bullet
 {
     texture=black_bullet
-    rect=0,0,16,16
-    hotspot=8,8
+    rect=0,0,18,18
+    hotspot=9,9
 }
 Sprite white_sheep_32
 {

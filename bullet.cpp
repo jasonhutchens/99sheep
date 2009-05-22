@@ -85,7 +85,7 @@ Bullet::onSetScale()
         m_body->DestroyShape( shape );
     }
     b2CircleDef shapeDef;
-    shapeDef.radius = 0.25f * 0.5f * 0.7f * m_sprite->GetWidth() * m_scale;
+    shapeDef.radius = 0.25f * 0.5f * 0.5f * m_sprite->GetWidth() * m_scale;
     shapeDef.density = 100.0f;
     shapeDef.friction =0.0f;
     shapeDef.restitution = 0.9f;
@@ -101,7 +101,7 @@ Bullet::doInit()
     bodyDef.allowSleep = false;
     bodyDef.userData = static_cast< void * >( this );
     m_body = Engine::b2d()->CreateDynamicBody( & bodyDef );
-	m_body->m_linearDamping = 0.2f;
+	m_body->m_linearDamping = 0.0f;
     onSetScale();
 
     m_channel = 0;

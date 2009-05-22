@@ -193,7 +193,7 @@ Fujin::doUpdate( float dt )
     }
     if ( shoot.LengthSquared() > 0.2f && m_bullet_timer <= 0.0f )
     {
-        m_bullet_timer = 0.015f;
+        m_bullet_timer = 0.01f;
         Bullet * bullet( static_cast< Bullet * >( Engine::em()->factory( Bullet::TYPE ) ) );
         if ( m_black )
         {
