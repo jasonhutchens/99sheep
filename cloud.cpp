@@ -36,7 +36,8 @@ Cloud::Cloud( float scale )
     :
     Entity( scale ),
     Damageable( 99.0f ),
-    m_size( 0 )
+    m_size( 0 ),
+    m_friend( false )
 {
 }
 
@@ -49,7 +50,7 @@ Cloud::~Cloud()
 void
 Cloud::collide( Entity * entity, b2ContactPoint * point )
 {
-    if ( entity->getType() != Bullet::TYPE )
+    if ( getFriend() || entity->getType() != Bullet::TYPE )
     {
         return;
     }
@@ -91,6 +92,20 @@ Cloud::setSize( int size )
 }
 
 //------------------------------------------------------------------------------
+bool
+Cloud::getFriend() const
+{
+    return m_friend;
+}
+
+//------------------------------------------------------------------------------
+void
+Cloud::setFriend( bool b_friend )
+{
+    m_friend = b_friend;
+}
+
+//------------------------------------------------------------------------------
 // static:
 //------------------------------------------------------------------------------
 void
@@ -123,7 +138,14 @@ Cloud::doInit()
 
 	b2CircleDef shapeDef;
 	shapeDef.radius = 0.5f * 0.95f * m_sprite->GetWidth() * m_scale;
-	shapeDef.density = 100.0f;
+    if ( m_size == 0 )
+    {
+	    shapeDef.density = 0.01f;
+    }
+    else
+    {
+	    shapeDef.density = 100.0f;
+    }
 	shapeDef.friction = 0.0f;
 	shapeDef.restitution = 0.7f;
 
@@ -193,6 +215,12 @@ Cloud::doUpdate( float dt )
         entity->getBody()->SetXForm( m_body->GetPosition(),
                                      m_body->GetAngle() );
         destroy(); 
+    }
+    if ( getFriend() )
+    {
+        b2Vec2 velocity( 0.0f, 0.0f );
+        m_body->SetAngularVelocity( 0.0f );
+        m_body->SetLinearVelocity( velocity );
     }
 }
 

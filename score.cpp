@@ -267,7 +267,7 @@ Score::render()
     {
         case SCORE_INPUT:
         {
-			font->printf( cx, cy + 40.0f, HGETEXT_CENTER,"%09dpts",m_value);
+			font->printf( cx, cy + 40.0f, HGETEXT_CENTER,"%02d Friend Get!",m_value);
             font->printf( cx, cy + 100.0f, HGETEXT_CENTER, m_name.c_str() );
             if ( static_cast<int>( m_timer * 2.0f ) % 2 != 0 )
             {
@@ -284,7 +284,7 @@ Score::render()
         }
         case SCORE_CALCULATE:
         {
-            font->printf( cx, 80.0f, HGETEXT_CENTER, "F R O W N   T O W N" );
+            font->printf( cx, 80.0f, HGETEXT_CENTER, "B A A A A A A R G H !" );
             break;
         }
         case SCORE_SHOW:

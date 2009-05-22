@@ -178,9 +178,22 @@ Game::update( float dt )
         return false;
     }
 
-    if ( m_fujin->isDestroyed() )
+    int score( m_fujin->getScore() );
+    if ( m_fujin->isDestroyed() || score >= 99 )
     {
-        Engine::instance()->switchContext( STATE_SCORE );
+        Engine::instance()->switchContext( STATE_MENU );
+        /*
+        if ( score == 0 )
+        {
+            Engine::instance()->switchContext( STATE_MENU );
+        }
+        else
+        {
+            Engine::instance()->switchContext( STATE_SCORE );
+            Context * context( Engine::instance()->getContext() );
+            static_cast< Score * >( context )->setValue( score );
+        }
+        */
         return false;
     }
 
@@ -312,6 +325,22 @@ Game::shouldCollide( Entity * left, Entity * right )
     if ( left->getType() == Bullet::TYPE && right->getType() == Fujin::TYPE )
     {
         return false;
+    }
+    if ( left->getType() == Cloud::TYPE && right->getType() == Bullet::TYPE )
+    {
+        return ! static_cast< Cloud * >( left )->getFriend();
+    }
+    if ( left->getType() == Bullet::TYPE && right->getType() == Cloud::TYPE )
+    {
+        return ! static_cast< Cloud * >( right )->getFriend();
+    }
+    if ( left->getType() == Cloud::TYPE && right->getType() == Fujin::TYPE )
+    {
+        return ! static_cast< Cloud * >( left )->getFriend();
+    }
+    if ( left->getType() == Fujin::TYPE && right->getType() == Cloud::TYPE )
+    {
+        return ! static_cast< Cloud * >( right )->getFriend();
     }
 
     return true;

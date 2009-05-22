@@ -26,7 +26,9 @@ Fujin::Fujin( float max_strength, float scale )
     Damageable( max_strength ),
     m_channel( 0 ),
     m_target_scale( 0.0f ),
-    m_bullet_timer( 0.0f )
+    m_bullet_timer( 0.0f ),
+    m_join(),
+    m_friends()
 {
 }
 
@@ -44,7 +46,17 @@ Fujin::~Fujin()
 void
 Fujin::collide( Entity * entity, b2ContactPoint * point )
 {
-    if ( entity->getType() == Cloud::TYPE && entity->getBlack() != getBlack() )
+	Cloud * cloud( static_cast< Cloud * >( entity ) );
+    if ( cloud->getFriend() || entity->getType() != Cloud::TYPE )
+    {
+        return;
+    }
+    if ( cloud->getSize() == 0 )
+    {
+        cloud->setFriend( true );
+        m_join.push_back( cloud );
+    }
+    else if ( entity->getBlack() != getBlack() )
     {
         takeDamage( 1000.0f );
     }
@@ -67,6 +79,13 @@ void
 Fujin::setTargetScale( float scale )
 {
     m_target_scale = scale;
+}
+
+//------------------------------------------------------------------------------
+int
+Fujin::getScore() const
+{
+    return m_friends.size();
 }
 
 //------------------------------------------------------------------------------
@@ -180,6 +199,43 @@ Fujin::doUpdate( float dt )
         }
 
 	}
+
+    while ( m_join.size() > 0 )
+    {
+        Cloud * cloud( m_join.back() );
+
+        b2Body * body1( m_body );
+        if ( m_friends.size() > 0 )
+        {
+            body1 = m_friends.back()->getBody();
+        }
+        b2Body * body2( cloud->getBody() );
+        b2Vec2 anchor1( body1->GetPosition() );
+        b2Vec2 anchor2( body2->GetPosition() );
+
+        {
+            b2Vec2 direction( 0.0f, 1.0f );
+            direction = b2Mul( body1->GetXForm().R, direction );
+            anchor1 = anchor1 + 16.0f * m_scale * direction;
+        }
+        {
+            b2Vec2 direction( 0.0f, -1.0f );
+            direction = b2Mul( body2->GetXForm().R, direction );
+            anchor2 = anchor2 + 16.0f * m_scale * direction;
+        }
+
+        body2->SetXForm( anchor1, body1->GetAngle() );
+
+        b2DistanceJointDef jointDef;
+
+        jointDef.Initialize( body1, body2, anchor1, anchor2 );
+        jointDef.collideConnected = true;
+
+        Engine::b2d()->CreateJoint( & jointDef );
+
+        m_friends.push_back( cloud );
+        m_join.pop_back();
+    }
 
     if ( Engine::instance()->getConfig().vibrate )
     {

@@ -33,6 +33,8 @@ class Fujin : public Entity, public Damageable
 
     void setTargetScale( float scale );
 
+    int getScore() const;
+
   protected:
     Fujin( const Fujin & );
     Fujin & operator=( const Fujin & );
@@ -47,6 +49,8 @@ class Fujin : public Entity, public Damageable
     HCHANNEL m_channel;
     float m_target_scale;
     float m_bullet_timer;
+    std::vector< Cloud * > m_join;
+    std::vector< Cloud * > m_friends;
 };
 
 #endif
