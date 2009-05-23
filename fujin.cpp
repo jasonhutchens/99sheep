@@ -210,26 +210,18 @@ Fujin::doUpdate( float dt )
             body1 = m_friends.back()->getBody();
         }
         b2Body * body2( cloud->getBody() );
-        b2Vec2 anchor1( body1->GetPosition() );
-        b2Vec2 anchor2( body2->GetPosition() );
+        b2Vec2 anchor( body1->GetPosition() );
 
-        {
-            b2Vec2 direction( 0.0f, 1.0f );
-            direction = b2Mul( body1->GetXForm().R, direction );
-            anchor1 = anchor1 + 16.0f * m_scale * direction;
-        }
-        {
-            b2Vec2 direction( 0.0f, -1.0f );
-            direction = b2Mul( body2->GetXForm().R, direction );
-            anchor2 = anchor2 + 16.0f * m_scale * direction;
-        }
+        b2Vec2 direction( 0.0f, 1.0f );
+        direction = b2Mul( body1->GetXForm().R, direction );
+        direction = 14.0f * m_scale * direction;
+        anchor = anchor + direction;
 
-        body2->SetXForm( anchor1, body1->GetAngle() );
+        body2->SetXForm( anchor + direction, body1->GetAngle() );
 
-        b2DistanceJointDef jointDef;
+        b2RevoluteJointDef jointDef;
 
-        jointDef.Initialize( body1, body2, anchor1, anchor2 );
-        jointDef.collideConnected = true;
+        jointDef.Initialize( body1, body2, anchor );
 
         Engine::b2d()->CreateJoint( & jointDef );
 

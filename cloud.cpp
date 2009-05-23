@@ -1,4 +1,4 @@
-//==============================================================================
+
 
 #include <cloud.hpp>
 #include <bullet.hpp>
@@ -29,6 +29,20 @@ namespace
         "black_sheep_256",
         "black_sheep_512",
     };
+    const float DAMAGE[] = {
+        10.0f,
+        8.0f,
+        4.0f,
+        2.0f,
+        1.0f
+    };
+    const float SPEED[] = {
+        20.0f,
+        30.0f,
+        20.0f,
+        10.0f,
+        5.0f
+    };
 };
 
 //==============================================================================
@@ -54,13 +68,13 @@ Cloud::collide( Entity * entity, b2ContactPoint * point )
     {
         return;
     }
-    if ( entity->getBlack() != getBlack() )
+    if ( entity->getBlack() != getBlack() || m_size == 0 )
     {
-        takeDamage( 2.5f / static_cast< float >( m_size + 1 ) );
+        takeDamage( DAMAGE[ m_size ] );
     }
-    else
+    else if ( m_size > 0 )
     {
-        addStrength( 2.5f / static_cast< float >( m_size + 1 ) );
+        addStrength( DAMAGE[ m_size ] );
     }
     entity->destroy();
 }
@@ -138,16 +152,13 @@ Cloud::doInit()
 
 	b2CircleDef shapeDef;
 	shapeDef.radius = 0.5f * 0.95f * m_sprite->GetWidth() * m_scale;
+	shapeDef.density = 10.0f;
     if ( m_size == 0 )
     {
-	    shapeDef.density = 0.01f;
+	    shapeDef.density = 0.001f;
     }
-    else
-    {
-	    shapeDef.density = 100.0f;
-    }
-	shapeDef.friction = 0.0f;
-	shapeDef.restitution = 0.7f;
+	shapeDef.friction = 0.1f;
+	shapeDef.restitution = 0.4f;
 
 	m_body->CreateShape(&shapeDef);
 	m_body->SetMassFromShapes();
@@ -155,7 +166,7 @@ Cloud::doInit()
     m_body->m_angularDamping = 0.0f;
     float spin( 5.0f / static_cast<float>(m_size + 1.0f) );
     m_body->SetAngularVelocity( Engine::hge()->Random_Float( -spin, spin ) );
-    float speed( 100.0f / static_cast<float>(m_size + 1.0f) );
+    float speed( SPEED[m_size] );
     b2Vec2 velocity( Engine::hge()->Random_Float( -speed, speed ),
                      Engine::hge()->Random_Float( -speed, speed ) );
     m_body->SetLinearVelocity( velocity );
