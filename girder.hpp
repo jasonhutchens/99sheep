@@ -20,6 +20,8 @@ class Girder : public Entity
     virtual ~Girder();
 
     virtual void collide( Entity * entity, b2ContactPoint * point );
+    void setShield( bool shield );
+    bool getShield() const;
 
     virtual void persistToDatabase();
 
@@ -38,6 +40,7 @@ class Girder : public Entity
 
   private:
     b2Vec2 m_dimensions;
+    bool m_shield;
 };
 
 #endif

@@ -153,16 +153,21 @@ Cloud::doInit()
 	b2CircleDef shapeDef;
 	shapeDef.radius = 0.5f * 0.95f * m_sprite->GetWidth() * m_scale;
 	shapeDef.density = 10.0f;
+	shapeDef.friction = 0.0f;
+	shapeDef.restitution = 1.0f;
     if ( m_size == 0 )
     {
 	    shapeDef.density = 0.001f;
     }
-	shapeDef.friction = 0.1f;
-	shapeDef.restitution = 0.4f;
 
 	m_body->CreateShape(&shapeDef);
 	m_body->SetMassFromShapes();
     m_body->m_linearDamping = 0.0f;
+    if ( m_size == 0 )
+    {
+        m_body->m_linearDamping = 0.9f;
+        m_body->m_angularDamping = 0.6f;
+    }
     m_body->m_angularDamping = 0.0f;
     float spin( 5.0f / static_cast<float>(m_size + 1.0f) );
     m_body->SetAngularVelocity( Engine::hge()->Random_Float( -spin, spin ) );

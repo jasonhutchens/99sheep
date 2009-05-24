@@ -38,17 +38,31 @@ namespace
         }
         return false;
     }
+
+    const char * MESSAGE[4] = {
+        "Get Ready",
+        "Game Over",
+        "Time Gone",
+        "Goal Get!"
+    };
 }
 
 //==============================================================================
 Game::Game()
     :
     Context(),
+    m_progress(),
     m_last_zoom( 1.0f ),
     m_zoom( 0 ),
     m_fujin( 0 ),
-    m_gameOutTimer(0),
-    m_black( true )
+    m_timeRemaining( 0.0f ),
+    m_score( 0 ),
+    m_gameOutTimer( 0.0f ),
+    m_gameInTimer( 0.0f ),
+    m_black( true ),
+    m_shield( 0 ),
+    m_overlay( 0 ),
+    m_message( 0 )
 {
 }
 
@@ -68,6 +82,8 @@ Game::init()
     hgeResourceManager * rm( Engine::rm() );
     ViewPort * vp( Engine::vp() );
 
+    m_overlay = new hgeSprite( 0, 0, 0, 1, 1 );
+
     notifyOnCollision( true );
 
     Fujin::registerEntity();
@@ -76,10 +92,11 @@ Game::init()
     Girder::registerEntity();
 
     m_last_zoom = 1.0f;
-    m_gameOutTimer = 0;
+    m_gameOutTimer = 0.0f;
+    m_gameInTimer = 3.0f;
     m_zoom = 0;
 
-    m_timeRemaining = 300;
+    m_timeRemaining = 99;
     m_score = 0;
     Engine::em()->init();
 
@@ -155,6 +172,9 @@ Game::fini()
 {
     notifyOnCollision( false );
 
+    delete m_overlay;
+    m_overlay = 0;
+
     Engine::em()->fini();
 }
 
@@ -166,10 +186,41 @@ Game::update( float dt )
     HGE * hge( Engine::hge() );
     ViewPort * vp( Engine::vp() );
 
-    if ( m_gameOutTimer <= 0 && m_timeRemaining <=0)
+    if ( m_gameInTimer > 0.0f )
     {
+        m_gameInTimer -= dt;
+        m_message = 0;
         return false;
     }
+    if ( m_gameOutTimer > 0.0f )
+    {
+        m_gameOutTimer -= dt;
+        if ( m_gameOutTimer <= 0.0f )
+        {
+            Engine::instance()->switchContext( STATE_MENU );
+            /*
+            if ( score == 0 )
+            {
+                Engine::instance()->switchContext( STATE_MENU );
+            }
+            else
+            {
+                score += static_cast< int >( m_timeRemaining );
+                Engine::instance()->switchContext( STATE_SCORE );
+                Context * context( Engine::instance()->getContext() );
+                static_cast< Score * >( context )->setValue( score );
+            }
+            */
+        }
+        return false;
+    }
+    if ( m_shield != 0 )
+    {
+        m_shield->destroy();
+        m_shield = 0;
+    }
+
+    m_timeRemaining -= dt;
 
     Engine::em()->update( dt );
 
@@ -179,21 +230,24 @@ Game::update( float dt )
     }
 
     int score( m_fujin->getScore() );
-    if ( m_fujin->isDestroyed() || score >= 99 )
+    if ( m_fujin->isDestroyed() || score >= 99 || m_timeRemaining <= 0.0f )
     {
-        Engine::instance()->switchContext( STATE_MENU );
-        /*
-        if ( score == 0 )
+        if ( m_gameOutTimer <= 0.0f )
         {
-            Engine::instance()->switchContext( STATE_MENU );
+            m_gameOutTimer = 3.0f;
+            if ( score >= 99 )
+            {
+                m_message = 3;
+            }
+            else if ( m_timeRemaining <= 0.0f )
+            {
+                m_message = 2;
+            }
+            else
+            {
+                m_message = 1;
+            }
         }
-        else
-        {
-            Engine::instance()->switchContext( STATE_SCORE );
-            Context * context( Engine::instance()->getContext() );
-            static_cast< Score * >( context )->setValue( score );
-        }
-        */
         return false;
     }
 
@@ -257,7 +311,20 @@ Game::render()
     b2Vec2 timeTextLocation (700,10);
     b2Vec2 scoreTextLocation(0,10);
     char timeRemainingText[10];
-    sprintf_s(timeRemainingText,"%d:%02d",(int)m_timeRemaining/60,(int)(m_timeRemaining)%60);
+    char scoreText[64];
+    sprintf_s(timeRemainingText,"%02.2f",m_timeRemaining);
+    if ( m_fujin->getScore() == 0 )
+    {
+        sprintf_s( scoreText, "No Friends" ); 
+    }
+    else if ( m_fujin->getScore() == 1 )
+    {
+        sprintf_s( scoreText, "1 Friend" ); 
+    }
+    else
+    {
+        sprintf_s( scoreText, "%d Friends", m_fujin->getScore() ); 
+    }
 
     ViewPort * vp( Engine::vp() );
     
@@ -306,6 +373,28 @@ Game::render()
         font->SetColor( 0xFFFFFFFF );
     }
 
+    font->printf( vp->screen().x * 0.5f, 10.0f, HGETEXT_CENTER, timeRemainingText );
+    font->printf( vp->screen().x * 0.5f, vp->screen().y - 40.0f,
+                  HGETEXT_CENTER, scoreText); 
+
+    if ( ( m_gameInTimer > 0.0f || m_gameOutTimer > 0.0f ) &&
+         ! Engine::instance()->isPaused() )
+    {
+        font->SetColor( 0xFFFFFFFF );
+        m_overlay->SetColor( 0xFFFFFFFF );
+        m_overlay->RenderStretch( 0.0f,
+                                  vp->screen().y * 0.5f - 22.0f,
+                                  vp->screen().x,
+                                  vp->screen().y * 0.5f + 22.0f  );
+        m_overlay->SetColor( 0xFF000000 );
+        m_overlay->RenderStretch( 0.0f,
+                                  vp->screen().y * 0.5f - 20.0f,
+                                  vp->screen().x,
+                                  vp->screen().y * 0.5f + 20.0f  );
+        font->printf( vp->screen().x * 0.5f, vp->screen().y * 0.5f - 15.0f,
+                      HGETEXT_CENTER, MESSAGE[m_message] );
+    }
+
     vp->setTransform();
 }
 
@@ -313,6 +402,19 @@ Game::render()
 bool
 Game::shouldCollide( Entity * left, Entity * right )
 {
+    if ( m_gameOutTimer > 0.0f )
+    {
+        return false;
+    }
+    if ( left->getType() == Fujin::TYPE && right->getType() == Girder::TYPE )
+    {
+        return ! static_cast< Girder * >( right )->getShield();
+    }
+    if ( left->getType() == Girder::TYPE && right->getType() == Fujin::TYPE )
+    {
+        return ! static_cast< Girder * >( left )->getShield();
+    }
+
     if ( left->getType() == Girder::TYPE || right->getType() == Girder::TYPE )
     {
         return true;
@@ -400,4 +502,14 @@ Game::_initArena()
         girder->init();
         girder->getBody()->SetXForm( position, 0.0f );
     }
+    dimensions.x = 5.0f;
+    dimensions.y = 5.0f;
+    m_shield = static_cast< Girder * >( Engine::em()->factory( Girder::TYPE ) );
+    m_shield->setScale( 1.0f );
+    m_shield->setDimensions( dimensions );
+    m_shield->setShield( true );
+    m_shield->init();
+    position.x = 0.0f;
+    position.y = 0.0f;
+    m_shield->getBody()->SetXForm( position, 0.0f );
 }

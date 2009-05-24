@@ -14,7 +14,8 @@
 Girder::Girder( float scale )
     :
     Entity( scale ),
-    m_dimensions()
+    m_dimensions(),
+    m_shield( false )
 {
 }
 
@@ -46,6 +47,20 @@ void
 Girder::setDimensions( const b2Vec2 & dimensions )
 {
     m_dimensions = dimensions;
+}
+
+//------------------------------------------------------------------------------
+void
+Girder::setShield( bool shield )
+{
+    m_shield = shield;
+}
+
+//------------------------------------------------------------------------------
+bool
+Girder::getShield() const
+{
+    return m_shield;
 }
 
 //------------------------------------------------------------------------------

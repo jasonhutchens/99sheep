@@ -10,6 +10,8 @@
 
 class Fujin;
 class Entity;
+class Girder;
+class hgeSprite;
 
 //------------------------------------------------------------------------------
 class Game : public Context
@@ -41,7 +43,11 @@ class Game : public Context
 	float m_timeRemaining;
 	int m_score;
 	float m_gameOutTimer;
+	float m_gameInTimer;
     bool m_black;
+    Girder * m_shield;
+    hgeSprite * m_overlay;
+    int m_message;
 };
 
 #endif
