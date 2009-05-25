@@ -267,7 +267,7 @@ Score::render()
     {
         case SCORE_INPUT:
         {
-			font->printf( cx, cy + 40.0f, HGETEXT_CENTER,"%02d Friend Get!",m_value);
+			font->printf( cx, cy + 40.0f, HGETEXT_CENTER,"Your Score: %02d",m_value);
             font->printf( cx, cy + 100.0f, HGETEXT_CENTER, m_name.c_str() );
             if ( static_cast<int>( m_timer * 2.0f ) % 2 != 0 )
             {

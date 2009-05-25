@@ -192,25 +192,28 @@ Game::update( float dt )
         m_message = 0;
         return false;
     }
+
+    int score( m_fujin->getScore() );
+
     if ( m_gameOutTimer > 0.0f )
     {
         m_gameOutTimer -= dt;
         if ( m_gameOutTimer <= 0.0f )
         {
-            Engine::instance()->switchContext( STATE_MENU );
-            /*
             if ( score == 0 )
             {
                 Engine::instance()->switchContext( STATE_MENU );
             }
             else
             {
-                score += static_cast< int >( m_timeRemaining );
+                if ( score >= 99 )
+                {
+                    score += static_cast< int >( m_timeRemaining );
+                }
                 Engine::instance()->switchContext( STATE_SCORE );
                 Context * context( Engine::instance()->getContext() );
                 static_cast< Score * >( context )->setValue( score );
             }
-            */
         }
         return false;
     }
@@ -229,7 +232,6 @@ Game::update( float dt )
         return false;
     }
 
-    int score( m_fujin->getScore() );
     if ( m_fujin->isDestroyed() || score >= 99 || m_timeRemaining <= 0.0f )
     {
         if ( m_gameOutTimer <= 0.0f )
