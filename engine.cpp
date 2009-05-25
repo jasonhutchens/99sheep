@@ -696,7 +696,7 @@ Engine::_initGraphics()
     m_hge->System_SetState( HGE_FRAMEFUNC, s_update );
     m_hge->System_SetState( HGE_RENDERFUNC, s_render );
     m_hge->System_SetState( HGE_EXITFUNC, s_exit );
-    m_hge->System_SetState( HGE_TITLE, "+++ 9 9 S H E E P v0.6 +++" );
+    m_hge->System_SetState( HGE_TITLE, "+++ 9 9 S H E E P v0.7 +++" );
     m_hge->System_SetState( HGE_ICON, MAKEINTRESOURCE( IDI_ICON1 ) );
     m_hge->System_SetState( HGE_SCREENBPP, 32 );
     m_hge->System_SetState( HGE_USESOUND, true );
@@ -709,6 +709,9 @@ Engine::_initGraphics()
     m_hge->System_SetState( HGE_SCREENWIDTH, m_config.screenWidth );
     m_hge->System_SetState( HGE_SCREENHEIGHT, m_config.screenHeight );
     m_hge->System_SetState( HGE_WINDOWED, ! m_config.fullScreen );
+
+    m_vp->screen().x =  m_config.screenWidth;
+    m_vp->screen().y =  m_config.screenHeight;
 
     m_overlay = new hgeSprite( 0, 0, 0, 1, 1 );
     m_overlay->SetColor( 0xCC000000 );

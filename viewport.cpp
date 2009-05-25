@@ -117,7 +117,7 @@ ViewPort::vscale() const
 void
 ViewPort::setScale( float scale )
 {
-    m_bounds = ( 1.0f / scale ) * m_screen;
+    m_bounds = ( 1.0f / scale ) * m_bounds;
     _updateRatios();
 }
 
