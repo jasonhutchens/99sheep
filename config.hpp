@@ -18,7 +18,9 @@ class Config
 
     int screenWidth;
     int screenHeight;
+    int bpp;
     bool fullScreen;
+    bool sound;
     std::string userName;
     int menu;
     bool vibrate;

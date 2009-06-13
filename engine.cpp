@@ -688,6 +688,7 @@ void
 Engine::_initGraphics()
 {
     m_hge = hgeCreate( HGE_VERSION );
+
     m_hge->System_SetState( HGE_LOGFILE, "kranzky.log" );
     m_hge->System_SetState( HGE_INIFILE, "kranzky.ini" );
     m_hge->System_SetState( HGE_FOCUSLOSTFUNC, s_loseFocus );
@@ -696,25 +697,89 @@ Engine::_initGraphics()
     m_hge->System_SetState( HGE_FRAMEFUNC, s_update );
     m_hge->System_SetState( HGE_RENDERFUNC, s_render );
     m_hge->System_SetState( HGE_EXITFUNC, s_exit );
-    m_hge->System_SetState( HGE_TITLE, "+++ 9 9 S H E E P v0.7 +++" );
+    m_hge->System_SetState( HGE_TITLE, "+++ 9 9 S H E E P v0.8 +++" );
     m_hge->System_SetState( HGE_ICON, MAKEINTRESOURCE( IDI_ICON1 ) );
-    m_hge->System_SetState( HGE_SCREENBPP, 32 );
-    m_hge->System_SetState( HGE_USESOUND, true );
     m_hge->System_SetState( HGE_SHOWSPLASH, false );
     m_hge->System_SetState( HGE_FPS, HGEFPS_UNLIMITED );
     //m_hge->System_SetState( HGE_TEXTUREFILTER, false );
 
     m_config.init();
+    _setBestScreenMode();
 
     m_hge->System_SetState( HGE_SCREENWIDTH, m_config.screenWidth );
     m_hge->System_SetState( HGE_SCREENHEIGHT, m_config.screenHeight );
+    m_hge->System_SetState( HGE_SCREENBPP, m_config.bpp );
+    m_hge->System_SetState( HGE_USESOUND, m_config.sound );
     m_hge->System_SetState( HGE_WINDOWED, ! m_config.fullScreen );
 
-    m_vp->screen().x =  m_config.screenWidth;
-    m_vp->screen().y =  m_config.screenHeight;
+    m_vp->screen().x = static_cast<int>( m_config.screenWidth );
+    m_vp->screen().y = static_cast<int>( m_config.screenHeight );
 
     m_overlay = new hgeSprite( 0, 0, 0, 1, 1 );
     m_overlay->SetColor( 0xCC000000 );
+}
+
+//------------------------------------------------------------------------------
+void
+Engine::_setBestScreenMode()
+{
+    int index = 0;
+    DEVMODE dm;
+    ZeroMemory( & dm, sizeof( dm ) );
+    dm.dmSize = sizeof( dm );
+    int bpp( 0 );
+    float width( 0.0f );
+    float height( 0.0f );
+    float desired_ratio( 16.0f / 9.0f );
+    int desired_bpp( m_config.bpp );
+    while ( EnumDisplaySettings( NULL, index++, & dm ) != 0 )
+    {
+        // If it's the first time through the loop, or if we find an exact
+        // match with the settings we want, then remember them.
+        if ( width <= 0.0f || m_config.bpp == dm.dmBitsPerPel &&
+                              m_config.screenWidth == dm.dmPelsWidth &&
+                              m_config.screenHeight == dm.dmPelsHeight )
+        {
+            bool first( width <= 0.0f );
+            bpp = static_cast<int>( dm.dmBitsPerPel );
+            width = static_cast<float>( dm.dmPelsWidth );
+            height = static_cast<float>( dm.dmPelsHeight );
+            if ( ! first )
+            {
+                // No need to continue if we found a perfect match.
+                break;
+            }
+        }
+        // If we've found a partial match that has the precise width that we
+        // wanted, then bail now (assumes ordered by increasing width).
+        if ( width >= m_config.screenWidth &&
+             static_cast<float>( dm.dmPelsWidth ) > width )
+        {
+            break;
+        }
+        // Check to see whether the current mode is better than what we're
+        // currently going to use. This means that either the aspect ratio
+        // is closer to ideal, or it's the same but the bpp is closer to
+        // ideal, or that's the same too but the resolution is higher.
+        float diff( fabs( desired_ratio -
+                          static_cast<float>( dm.dmPelsWidth ) /
+                          static_cast<float>( dm.dmPelsHeight ) ) -
+                    fabs( desired_ratio - width / height ) );
+        int dpp( abs( desired_bpp - static_cast<int>( dm.dmBitsPerPel ) ) -
+                 abs( desired_bpp - bpp ) );
+        if ( diff < 0.0f || diff == 0.0f && dpp <= 0 ||
+             diff == 0.0f && dpp == 0 &&
+             width > static_cast<float>( dm.dmPelsWidth ) )
+        {
+            bpp = static_cast<int>( dm.dmBitsPerPel );
+            width = static_cast<float>( dm.dmPelsWidth );
+            height = static_cast<float>( dm.dmPelsHeight );
+        }
+    }
+    // Set the config to what we can support. This will be written to disk.
+    m_config.bpp = bpp;
+    m_config.screenWidth = static_cast<int>( width );
+    m_config.screenHeight = static_cast<int>( height );
 }
 
 //------------------------------------------------------------------------------

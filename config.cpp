@@ -10,11 +10,13 @@ Config::Config()
     :
     screenWidth( 1280 ),
     screenHeight( 720 ),
+    bpp( 32 ),
 #ifdef _DEBUG
     fullScreen( false ),
 #else
     fullScreen( true ),
 #endif
+    sound( true ),
     userName( "Lloyd" ),
     menu( 1 ),
 #ifdef _DEBUG
@@ -39,8 +41,10 @@ Config::init()
                                              screenWidth );
     screenHeight = Engine::hge()->Ini_GetInt( "kranzky","height",
                                               screenHeight );
+    bpp = Engine::hge()->Ini_GetInt( "kranzky","bpp", bpp );
     fullScreen = Engine::hge()->Ini_GetInt( "kranzky", "fullscreen",
                                             fullScreen ? 1 : 0 ) == 1;
+    sound = Engine::hge()->Ini_GetInt( "kranzky", "sound", sound ? 1 : 0 ) == 1;
     userName = Engine::hge()->Ini_GetString( "kranzky", "username",
                                              userName.c_str() );
     menu = Engine::hge()->Ini_GetInt( "kranzky", "menu", menu );
@@ -56,7 +60,9 @@ Config::fini()
 {
     Engine::hge()->Ini_SetInt( "kranzky", "width", screenWidth );
     Engine::hge()->Ini_SetInt( "kranzky","height", screenHeight );
+    Engine::hge()->Ini_SetInt( "kranzky","bpp", bpp );
     Engine::hge()->Ini_SetInt( "kranzky", "fullscreen", fullScreen ? 1 : 0 );
+    Engine::hge()->Ini_SetInt( "kranzky", "sound", sound ? 1 : 0 );
     Engine::hge()->Ini_SetString( "kranzky", "username", userName.c_str() );
     Engine::hge()->Ini_SetInt( "kranzky", "menu", menu );
     Engine::hge()->Ini_SetInt( "kranzky", "vibrate", vibrate ? 1 : 0 );

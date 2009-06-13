@@ -32,6 +32,7 @@ class Game : public Context
     virtual bool shouldCollide( Entity * left, Entity * right );
 
 	int getZoom() { return m_zoom; }
+    bool getBlack() { return m_black; }
 
   private:
     void _initArena();

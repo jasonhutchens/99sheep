@@ -408,6 +408,7 @@ Game::shouldCollide( Entity * left, Entity * right )
     {
         return false;
     }
+
     if ( left->getType() == Fujin::TYPE && right->getType() == Girder::TYPE )
     {
         return ! static_cast< Girder * >( right )->getShield();
@@ -415,6 +416,15 @@ Game::shouldCollide( Entity * left, Entity * right )
     if ( left->getType() == Girder::TYPE && right->getType() == Fujin::TYPE )
     {
         return ! static_cast< Girder * >( left )->getShield();
+    }
+
+    if ( left->getType() == Cloud::TYPE && right->getType() == Girder::TYPE )
+    {
+        return ! static_cast< Cloud * >( left )->getFriend();
+    }
+    if ( left->getType() == Girder::TYPE && right->getType() == Cloud::TYPE )
+    {
+        return ! static_cast< Cloud * >( right )->getFriend();
     }
 
     if ( left->getType() == Girder::TYPE || right->getType() == Girder::TYPE )
@@ -430,6 +440,7 @@ Game::shouldCollide( Entity * left, Entity * right )
     {
         return false;
     }
+
     if ( left->getType() == Cloud::TYPE && right->getType() == Bullet::TYPE )
     {
         return ! static_cast< Cloud * >( left )->getFriend();
@@ -438,6 +449,7 @@ Game::shouldCollide( Entity * left, Entity * right )
     {
         return ! static_cast< Cloud * >( right )->getFriend();
     }
+
     if ( left->getType() == Cloud::TYPE && right->getType() == Fujin::TYPE )
     {
         return ! static_cast< Cloud * >( left )->getFriend();

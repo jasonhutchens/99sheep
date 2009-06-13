@@ -181,6 +181,10 @@ Cloud::doInit()
 void
 Cloud::doUpdate( float dt )
 {
+    if ( m_size == 0 )
+    {
+        setBlack( ! static_cast<Game *>( Engine::instance()->getContext() )->getBlack() );
+    }
     updateDamageable( dt );
     if ( m_black )
     {
