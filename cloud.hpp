@@ -26,6 +26,7 @@ class Cloud : public Entity, public Damageable
     int getSize() const;
     void setSize( int size );
 
+    bool isHarmful() const;
     bool getFriend() const;
     void setFriend( bool b_friend );
 
@@ -43,6 +44,7 @@ class Cloud : public Entity, public Damageable
   private:
     int m_size;
     bool m_friend;
+    float m_life;
 };
 
 #endif

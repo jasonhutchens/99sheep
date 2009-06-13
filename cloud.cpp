@@ -1,4 +1,4 @@
-
+//==============================================================================
 
 #include <cloud.hpp>
 #include <bullet.hpp>
@@ -12,6 +12,8 @@
 #include <Query.h>
 #include <hgeparticle.h>
 #include <hgeresource.h>
+
+//------------------------------------------------------------------------------
 
 namespace
 {
@@ -51,7 +53,8 @@ Cloud::Cloud( float scale )
     Entity( scale ),
     Damageable( 99.0f ),
     m_size( 0 ),
-    m_friend( false )
+    m_friend( false ),
+    m_life( 4.0f )
 {
 }
 
@@ -107,6 +110,13 @@ Cloud::setSize( int size )
 
 //------------------------------------------------------------------------------
 bool
+Cloud::isHarmful() const
+{
+    return m_life > 3.0f;
+}
+
+//------------------------------------------------------------------------------
+bool
 Cloud::getFriend() const
 {
     return m_friend;
@@ -145,6 +155,7 @@ Cloud::doInit()
     }
 
     m_zoom = 0;
+    m_life = 4.0f;
 
 	b2BodyDef bodyDef;
 	bodyDef.userData = static_cast<void*> (this);
@@ -181,9 +192,10 @@ Cloud::doInit()
 void
 Cloud::doUpdate( float dt )
 {
+    m_life += dt;
     if ( m_size == 0 )
     {
-        setBlack( ! static_cast<Game *>( Engine::instance()->getContext() )->getBlack() );
+        setBlack( static_cast<Game *>( Engine::instance()->getContext() )->getBlack() );
     }
     updateDamageable( dt );
     if ( m_black )
@@ -250,22 +262,17 @@ Cloud::doRender( float scale )
 {
     b2Vec2 position( m_body->GetPosition() );
     float angle( m_body->GetAngle() );
-    m_sprite->RenderEx( position.x, position.y, angle, m_scale );
-    float offset( 12.0f * m_size );
-    b2Vec2 direction( 0.0f, offset );
-    direction = b2Mul( m_body->GetXForm().R, direction );
-    position = position + m_scale * direction;
-    if ( m_size == 0 )
+    if ( m_life < 3.0f )
     {
-        return;
-    }
-    if ( getBlack() )
-    {
-        renderDamageable( position, m_scale, 0xFFFFFFFF );
+        if ( static_cast<int>( m_life * 10 ) % 2 == 0 )
+        {
+            m_sprite->RenderEx( position.x, position.y, angle, m_scale );
+        }
     }
     else
     {
-        renderDamageable( position, m_scale, 0xFF000000 );
+        m_sprite->SetColor( 0xFFFFFFFF );
+        m_sprite->RenderEx( position.x, position.y, angle, m_scale );
     }
 }
 

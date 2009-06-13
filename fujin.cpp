@@ -47,7 +47,7 @@ void
 Fujin::collide( Entity * entity, b2ContactPoint * point )
 {
 	Cloud * cloud( static_cast< Cloud * >( entity ) );
-    if ( cloud->getFriend() || entity->getType() != Cloud::TYPE )
+    if ( entity->getType() != Cloud::TYPE || cloud->getFriend() )
     {
         return;
     }
@@ -56,7 +56,8 @@ Fujin::collide( Entity * entity, b2ContactPoint * point )
         cloud->setFriend( true );
         m_join.push_back( cloud );
     }
-    else if ( entity->getBlack() != getBlack() )
+    else if ( entity->getBlack() != getBlack() &&
+              cloud->isHarmful() )
     {
         takeDamage( 1000.0f );
     }
@@ -165,6 +166,23 @@ Fujin::doUpdate( float dt )
 
         acceleration = pad.getStick( XPAD_THUMBSTICK_LEFT );
         shoot = pad.getStick( XPAD_THUMBSTICK_RIGHT );
+
+		if( pad.getButtonState( XPAD_BUTTON_DPAD_UP ) )
+		{
+            acceleration.y += 1.0f;
+		}
+		if( pad.getButtonState( XPAD_BUTTON_DPAD_DOWN ) )
+		{
+            acceleration.y -= 1.0f;
+		}
+		if( pad.getButtonState( XPAD_BUTTON_DPAD_LEFT ) )
+		{
+            acceleration.x -= 1.0f;
+		}
+		if( pad.getButtonState( XPAD_BUTTON_DPAD_RIGHT ) )
+		{
+            acceleration.x += 1.0f;
+		}
     }
 	else
 	{

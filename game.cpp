@@ -95,6 +95,7 @@ Game::init()
     m_gameOutTimer = 0.0f;
     m_gameInTimer = 3.0f;
     m_zoom = 0;
+    m_black = true;
 
     m_timeRemaining = 99;
     m_score = 0;
@@ -255,17 +256,25 @@ Game::update( float dt )
 
     if ( pad.isConnected() )
     {
-        if ( pad.buttonDown( XPAD_BUTTON_LEFT_SHOULDER ) )
+        if ( pad.buttonDown( XPAD_BUTTON_LEFT_SHOULDER ) ||
+             pad.buttonDown( XPAD_BUTTON_RIGHT_SHOULDER ) ||
+             pad.buttonDown( XPAD_BUTTON_LEFT_THUMB ) ||
+             pad.buttonDown( XPAD_BUTTON_RIGHT_THUMB ) ||
+             pad.buttonDown( XPAD_BUTTON_BUTTON_Y ) ||
+             pad.buttonDown( XPAD_BUTTON_X ) ||
+             pad.buttonDown( XPAD_BUTTON_B ) ||
+             pad.buttonDown( XPAD_BUTTON_A ) )
         {
-            m_black = true;
-            setColour( 0xFFFFFFFF );
-            m_fujin->setBlack( true );
-        }
-        else if ( pad.buttonDown( XPAD_BUTTON_RIGHT_SHOULDER ) )
-        {
-            m_black = false;
-            setColour( 0xFF000000 );
-            m_fujin->setBlack( false );
+            m_black = ! m_black;
+            m_fujin->setBlack( m_black );
+            if ( m_black )
+            {
+                setColour( 0xFFFFFFFF );
+            }
+            else
+            {
+                setColour( 0xFF000000 );
+            }
         }
     }
     else
