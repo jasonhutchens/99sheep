@@ -179,7 +179,9 @@ ViewPort::restore()
         height = GetSystemMetrics( SM_CYSCREEN );
     }
     m_screen.x = static_cast<float>( width );
-    m_screen.y = static_cast<float>( height );
+    m_screen.y = ( 9.0f * m_screen.x ) / 16.0f;
+    m_centre.y = 100.0f;
+//  m_screen.y = static_cast<float>( height );
 	return true;
 }
 

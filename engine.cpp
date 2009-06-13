@@ -568,6 +568,7 @@ Engine::_update()
     {
         m_hge->Gfx_BeginScene();
         m_hge->Gfx_Clear( m_contexts[m_state]->getColour() );
+        // TODO: draw letterbox
         m_contexts[m_state]->render();
     }      
 
@@ -627,6 +628,7 @@ Engine::_render()
     {
         m_hge->Gfx_BeginScene();
         m_hge->Gfx_Clear( m_contexts[m_state]->getColour() );
+        // TODO: draw letterbox
         m_contexts[m_state]->render();
         m_hge->Gfx_SetTransform();
         if ( m_show_mouse && m_mouse_sprite != 0 )
@@ -713,7 +715,8 @@ Engine::_initGraphics()
     m_hge->System_SetState( HGE_WINDOWED, ! m_config.fullScreen );
 
     m_vp->screen().x = static_cast<int>( m_config.screenWidth );
-    m_vp->screen().y = static_cast<int>( m_config.screenHeight );
+    m_vp->screen().y = static_cast<int>( ( 9.0f * m_config.screenWidth ) / 16.0f);
+    //m_vp->screen().y = static_cast<int>( m_config.screenHeight );
 
     m_overlay = new hgeSprite( 0, 0, 0, 1, 1 );
     m_overlay->SetColor( 0xCC000000 );
