@@ -94,6 +94,7 @@ class Engine : public b2BoundaryListener, public b2ContactListener,
     virtual void Persist( b2ContactPoint * point );
     virtual void Remove( b2ContactPoint * point );
     virtual bool ShouldCollide( b2Shape * shape1, b2Shape * shape2 );
+    HCHANNEL getChannel() const { return m_channel; }
 
   private:
     bool _loseFocus();
@@ -131,6 +132,7 @@ class Engine : public b2BoundaryListener, public b2ContactListener,
     float m_time_ratio;
     hgeGUI * m_gui;
     bool m_stick;
+    HCHANNEL m_channel;
 };
 
 #endif

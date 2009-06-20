@@ -23,7 +23,3 @@ CREDITS
 Lloyd Kranzky  - Typing
 Pazu Kranzky   - Drawing
 Olga Kranzky   - The most best ghiveci in worlds
-
-Start - 7
-End - 106
-Finish = 113

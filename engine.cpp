@@ -45,7 +45,8 @@ Engine::Engine()
     m_mouse_sprite( 0 ),
     m_time_ratio( 1.0f ),
     m_gui( 0 ),
-    m_stick( false )
+    m_stick( false ),
+    m_channel( 0 )
 {
     m_vp = new ViewPort();
     m_em = new EntityManager();
@@ -189,6 +190,9 @@ Engine::init()
     m_gui->Enter();
 
     m_hge->Random_Seed();
+
+    m_channel = m_hge->Effect_PlayEx( m_rm->GetEffect( "music" ),
+                                      100, 0, 0, true );
 }
 
 //------------------------------------------------------------------------------

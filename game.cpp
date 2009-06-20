@@ -95,7 +95,7 @@ Game::init()
 
     m_last_zoom = 1.0f;
     m_gameOutTimer = 0.0f;
-    m_gameInTimer = 6.5f;
+    m_gameInTimer = 6.7f;
     m_zoom = 0;
     m_black = true;
 
@@ -168,7 +168,8 @@ Game::init()
 
     _initArena();
 
-    Engine::hge()->Channel_StopAll();
+    Engine::hge()->Channel_SlideTo( Engine::instance()->getChannel(),
+                                    2.0f, 0 );
     m_timer = 0.0f;
     HEFFECT music = rm->GetEffect( "game" );
     m_channel = Engine::hge()->Effect_PlayEx( music, 100, 0, 0, false );
@@ -183,7 +184,8 @@ Game::fini()
     delete m_overlay;
     m_overlay = 0;
 
-    Engine::hge()->Channel_StopAll();
+    Engine::hge()->Channel_SlideTo( Engine::instance()->getChannel(),
+                                    2.0f, 100 );
     Engine::em()->fini();
 }
 
@@ -261,7 +263,7 @@ Game::update( float dt )
             {
                 Engine::hge()->Channel_SetPos( m_channel, 105.0f );
             }
-            m_gameOutTimer = 7.5f;
+            m_gameOutTimer = 4.0f;
             if ( score >= 99 )
             {
                 m_message = 3;
