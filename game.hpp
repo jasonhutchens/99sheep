@@ -49,6 +49,8 @@ class Game : public Context
     Girder * m_shield;
     hgeSprite * m_overlay;
     int m_message;
+    HCHANNEL m_channel;
+    float m_timer;
 };
 
 #endif

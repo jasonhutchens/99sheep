@@ -62,7 +62,9 @@ Game::Game()
     m_black( true ),
     m_shield( 0 ),
     m_overlay( 0 ),
-    m_message( 0 )
+    m_message( 0 ),
+    m_channel( 0 ),
+    m_timer( 0.0f )
 {
 }
 
@@ -93,7 +95,7 @@ Game::init()
 
     m_last_zoom = 1.0f;
     m_gameOutTimer = 0.0f;
-    m_gameInTimer = 3.0f;
+    m_gameInTimer = 6.5f;
     m_zoom = 0;
     m_black = true;
 
@@ -165,6 +167,11 @@ Game::init()
     }
 
     _initArena();
+
+    Engine::hge()->Channel_StopAll();
+    m_timer = 0.0f;
+    HEFFECT music = rm->GetEffect( "game" );
+    m_channel = Engine::hge()->Effect_PlayEx( music, 100, 0, 0, false );
 }
 
 //------------------------------------------------------------------------------
@@ -176,6 +183,7 @@ Game::fini()
     delete m_overlay;
     m_overlay = 0;
 
+    Engine::hge()->Channel_StopAll();
     Engine::em()->fini();
 }
 
@@ -186,6 +194,18 @@ Game::update( float dt )
     const Controller & pad( Engine::instance()->getController() );
     HGE * hge( Engine::hge() );
     ViewPort * vp( Engine::vp() );
+
+    bool paused( Engine::instance()->isPaused() );
+    if ( paused && hge->Channel_IsPlaying( m_channel ) )
+    {
+        hge->Channel_Pause( m_channel );
+    }
+    else if ( ! paused && ! hge->Channel_IsPlaying( m_channel ) )
+    {
+        hge->Channel_Resume( m_channel );
+    }
+
+    m_timer = hge->Channel_GetPos( m_channel );
 
     if ( m_gameInTimer > 0.0f )
     {
@@ -237,7 +257,11 @@ Game::update( float dt )
     {
         if ( m_gameOutTimer <= 0.0f )
         {
-            m_gameOutTimer = 3.0f;
+            if (m_timer < 103.0f )
+            {
+                Engine::hge()->Channel_SetPos( m_channel, 105.0f );
+            }
+            m_gameOutTimer = 7.5f;
             if ( score >= 99 )
             {
                 m_message = 3;
@@ -384,9 +408,11 @@ Game::render()
         font->SetColor( 0xFFFFFFFF );
     }
 
+    /*
     font->printf( vp->screen().x * 0.5f, 10.0f, HGETEXT_CENTER, timeRemainingText );
     font->printf( vp->screen().x * 0.5f, vp->screen().y - 40.0f,
                   HGETEXT_CENTER, scoreText); 
+                  */
 
     if ( ( m_gameInTimer > 0.0f || m_gameOutTimer > 0.0f ) &&
          ! Engine::instance()->isPaused() )

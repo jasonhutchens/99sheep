@@ -180,3 +180,7 @@ Sound music
 {
     filename=Kranzky.mp3
 }
+Sound game
+{
+    filename="99sheep.mp3"
+}

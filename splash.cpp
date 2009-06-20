@@ -25,7 +25,7 @@ void
 Splash::init()
 {
     hgeResourceManager * rm( Engine::rm() );
-    Engine::hge()->Effect_PlayEx( rm->GetEffect( "music" ), 20, 0, 1, true );
+    Engine::hge()->Effect_PlayEx( rm->GetEffect( "music" ), 100, 0, 0, true );
     m_timer = 0.0f;
 }
 
