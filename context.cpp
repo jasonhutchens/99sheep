@@ -7,7 +7,8 @@
 Context::Context()
     :
     m_handles_collisions( false ),
-    m_colour( 0 )
+    m_colour( 0xFF000000 ),
+    m_border( 0xFFFFFFFF )
 {
 }
 
@@ -45,10 +46,24 @@ Context::getColour()
 }
 
 //------------------------------------------------------------------------------
+DWORD
+Context::getBorder()
+{
+    return m_border;
+}
+
+//------------------------------------------------------------------------------
 void
 Context::setColour( DWORD colour )
 {
     m_colour = colour;
+}
+
+//------------------------------------------------------------------------------
+void
+Context::setBorder( DWORD border )
+{
+    m_border = border;
 }
 
 //==============================================================================

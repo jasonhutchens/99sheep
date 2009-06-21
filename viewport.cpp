@@ -12,7 +12,9 @@ ViewPort::ViewPort()
     m_screen(),
     m_hscale( 0.0f ),
     m_vscale( 0.0f ),
-    m_angle( 0.0f )
+    m_angle( 0.0f ),
+    m_dx( 0.0f ),
+    m_dy( 0.0f )
 {
 }
 
@@ -155,11 +157,18 @@ ViewPort::setTransform( float scale )
     {
         dy = miny;
     }
-    dx = 0.5f * m_screen.x;
-    dy = 0.5f * m_screen.y;
+    dx = 0.5f * m_screen.x + m_dx;
+    dy = 0.5f * m_screen.y + m_dy;
     Engine::hge()->Gfx_SetTransform( m_offset.x, m_offset.y, dx, dy,
                                      m_angle,
                                      scale * m_hscale, scale * m_vscale );
+}
+
+//------------------------------------------------------------------------------
+void
+ViewPort::reset()
+{
+    Engine::hge()->Gfx_SetTransform( 0.0f, 0.0f, m_dx, m_dy, 0.0f, 1.0f, 1.0f );
 }
 
 //------------------------------------------------------------------------------
@@ -178,10 +187,21 @@ ViewPort::restore()
         width = GetSystemMetrics( SM_CXSCREEN );
         height = GetSystemMetrics( SM_CYSCREEN );
     }
-    m_screen.x = static_cast<float>( width );
-    m_screen.y = ( 9.0f * m_screen.x ) / 16.0f;
-    m_centre.y = 100.0f;
-//  m_screen.y = static_cast<float>( height );
+    float ratio( static_cast<float>(width)/static_cast<float>(height) );
+    if ( ratio > 16.0f / 9.0f )
+    {
+        m_screen.y = static_cast<float>( height );
+        m_screen.x = ( 16.0f * m_screen.y ) / 9.0f;
+        m_dx = 0.5f * ( static_cast<float>( width ) - m_screen.x );
+        m_dy = 0.0f;
+    }
+    else
+    {
+        m_screen.x = static_cast<float>( width );
+        m_screen.y = ( 9.0f * m_screen.x ) / 16.0f;
+        m_dx = 0.0f;
+        m_dy = 0.5f * ( static_cast<float>( height ) - m_screen.y );
+    }
 	return true;
 }
 

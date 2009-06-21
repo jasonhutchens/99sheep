@@ -24,7 +24,10 @@ class ViewPort
     void setScale( float scale );
     void setAngle( float angle );
     void setTransform( float scale = 1.0f );
+    void reset();
     bool restore();
+    float getWidthOffset() const { return m_dx; }
+    float getHeightOffset() const { return m_dy; }
 
   private:
     void _updateRatios() const;
@@ -36,6 +39,8 @@ class ViewPort
     mutable float m_hscale;
     mutable float m_vscale;
     float m_angle;
+    float m_dx;
+    float m_dy;
 };
 
 #endif

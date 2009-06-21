@@ -29,11 +29,14 @@ class Context
     virtual bool update( float dt ) = 0;
     virtual void render() = 0;
     virtual DWORD getColour();
+    virtual DWORD getBorder();
     virtual void setColour( DWORD colour );
+    virtual void setBorder( DWORD colour );
 
   private:
     bool m_handles_collisions;
     DWORD m_colour;
+    DWORD m_border;
 };
 
 #endif

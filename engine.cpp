@@ -572,8 +572,9 @@ Engine::_update()
     {
         m_hge->Gfx_BeginScene();
         m_hge->Gfx_Clear( m_contexts[m_state]->getColour() );
-        // TODO: draw letterbox
         m_contexts[m_state]->render();
+        m_vp->reset();
+        _drawLetterbox();
     }      
 
     if ( m_paused )
@@ -611,7 +612,6 @@ Engine::_update()
 
     if ( m_dd->GetFlags() != 0 )
     {
-        m_hge->Gfx_SetTransform();
         _pauseOverlay();
         m_hge->Gfx_EndScene();
     }
@@ -632,9 +632,9 @@ Engine::_render()
     {
         m_hge->Gfx_BeginScene();
         m_hge->Gfx_Clear( m_contexts[m_state]->getColour() );
-        // TODO: draw letterbox
         m_contexts[m_state]->render();
-        m_hge->Gfx_SetTransform();
+        m_vp->reset();
+        _drawLetterbox();
         if ( m_show_mouse && m_mouse_sprite != 0 )
         {
             float x( 0.0f ); 
@@ -691,6 +691,28 @@ Engine::_pauseOverlay()
 
 //------------------------------------------------------------------------------
 void
+Engine::_drawLetterbox()
+{
+    m_overlay->SetColor( m_contexts[m_state]->getBorder() );
+    float width( m_vp->screen().x );
+    float height( m_vp->screen().y );
+    float dx( m_vp->getWidthOffset() );
+    float dy( m_vp->getHeightOffset() );
+    if ( dx > 0.0f )
+    {
+        m_overlay->RenderStretch( -dx, 0.0f, 0.0f, height + 2.0f * dy );
+        m_overlay->RenderStretch( width, 0.0f, width + dx, height + 2.0f * dy );
+    }
+    if ( dy > 0.0f )
+    {
+        m_overlay->RenderStretch( 0.0f, -dy, width + 2.0f * dx, 0.0f );
+        m_overlay->RenderStretch( 0.0f, height, width + 2.0f * dx, height + dy );
+    }
+    m_overlay->SetColor( 0xCC000000 );
+}
+
+//------------------------------------------------------------------------------
+void
 Engine::_initGraphics()
 {
     m_hge = hgeCreate( HGE_VERSION );
@@ -718,8 +740,8 @@ Engine::_initGraphics()
     m_hge->System_SetState( HGE_USESOUND, m_config.sound );
     m_hge->System_SetState( HGE_WINDOWED, ! m_config.fullScreen );
 
-    m_vp->screen().x = static_cast<int>( m_config.screenWidth );
-    m_vp->screen().y = static_cast<int>( ( 9.0f * m_config.screenWidth ) / 16.0f);
+    m_vp->screen().x = static_cast<float>( m_config.screenWidth );
+    m_vp->screen().y = static_cast<float>( ( 9.0f * m_config.screenWidth ) / 16.0f);
     //m_vp->screen().y = static_cast<int>( m_config.screenHeight );
 
     m_overlay = new hgeSprite( 0, 0, 0, 1, 1 );

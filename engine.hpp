@@ -104,6 +104,7 @@ class Engine : public b2BoundaryListener, public b2ContactListener,
     bool _render();
     bool _exit();
     void _pauseOverlay();
+    void _drawLetterbox();
     void _initGraphics();
     void _setBestScreenMode();
     void _initPhysics();

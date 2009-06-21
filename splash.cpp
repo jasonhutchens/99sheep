@@ -59,6 +59,7 @@ Splash::render()
     int height( Engine::hge()->System_GetState( HGE_SCREENHEIGHT ) );
 
     setColour( 0xFFFFFFFF );
+    setBorder( 0xFF000000 );
     sprite = rm->GetSprite( "developer" );
 
     sprite->RenderEx( 0.5f * static_cast<float>( width ),

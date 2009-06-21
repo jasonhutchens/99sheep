@@ -97,7 +97,6 @@ Game::init()
     m_gameOutTimer = 0.0f;
     m_gameInTimer = 6.5f;
     m_zoom = 0;
-    m_black = true;
 
     m_timeRemaining = 99;
     m_score = 0;
@@ -122,8 +121,11 @@ Game::init()
     m_fujin->setTargetScale( FUJIN / ZOOM[m_zoom] );
     m_fujin->setZoom( m_zoom );
 
+    m_black = true;
+    m_fujin->setBlack( m_black );
     setColour( 0xFFFFFFFF );
-    m_fujin->setBlack( true );
+    setBorder( 0xFF000000 );
+
 
     {
     Entity* entity = Engine::em()->factory( Cloud::TYPE );
@@ -297,10 +299,12 @@ Game::update( float dt )
             if ( m_black )
             {
                 setColour( 0xFFFFFFFF );
+                setBorder( 0xFF000000 );
             }
             else
             {
                 setColour( 0xFF000000 );
+                setBorder( 0xFFFFFFFF );
             }
         }
     }
@@ -311,6 +315,7 @@ Game::update( float dt )
         {
             m_black = true;
             setColour( 0xFFFFFFFF );
+            setBorder( 0xFF000000 );
             m_fujin->setBlack( true );
         }
         else if ( ( Engine::hge()->Input_KeyDown( HGEK_E ) ||
@@ -318,6 +323,7 @@ Game::update( float dt )
         {
             m_black = false;
             setColour( 0xFF000000 );
+            setBorder( 0xFFFFFFFF );
             m_fujin->setBlack( false );
         }
     }
@@ -389,7 +395,7 @@ Game::render()
         entity->render( scale );
     }
     // render time remaining
-    Engine::hge()->Gfx_SetTransform();
+    Engine::vp()->reset();
 
     std::string progressText;
     std::list<int>::iterator iter;
