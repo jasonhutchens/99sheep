@@ -2,6 +2,7 @@
 
 #include <splash.hpp>
 #include <engine.hpp>
+#include <viewport.hpp>
 
 #include <hgeresource.h>
 
@@ -55,15 +56,14 @@ Splash::render()
     hgeResourceManager * rm( Engine::rm() );
     hgeSprite * sprite( 0 );
 
-    int width( Engine::hge()->System_GetState( HGE_SCREENWIDTH ) );
-    int height( Engine::hge()->System_GetState( HGE_SCREENHEIGHT ) );
+    float width( Engine::vp()->screen().x );
+    float height( Engine::vp()->screen().y );
 
     setColour( 0xFFFFFFFF );
     setBorder( 0xFF000000 );
     sprite = rm->GetSprite( "developer" );
 
-    sprite->RenderEx( 0.5f * static_cast<float>( width ),
-                      0.5f * static_cast<float>( height ), 0.0f, 1.0f );
+    sprite->RenderEx( 0.5f * width, 0.5f * height, 0.0f, 1.0f );
 }
 
 //==============================================================================
