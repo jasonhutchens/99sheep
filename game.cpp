@@ -40,7 +40,7 @@ namespace
     }
 
     const char * MESSAGE[4] = {
-        "Get Ready",
+        "Get Ready: %02d",
         "Game Over",
         "Time Gone",
         "Goal Get!"
@@ -95,7 +95,7 @@ Game::init()
 
     m_last_zoom = 1.0f;
     m_gameOutTimer = 0.0f;
-    m_gameInTimer = 6.7f;
+    m_gameInTimer = 6.5f;
     m_zoom = 0;
     m_black = true;
 
@@ -172,7 +172,8 @@ Game::init()
                                     2.0f, 0 );
     m_timer = 0.0f;
     HEFFECT music = rm->GetEffect( "game" );
-    m_channel = Engine::hge()->Effect_PlayEx( music, 100, 0, 0, false );
+    m_channel = Engine::hge()->Effect_PlayEx( music, 0, 0, 0, false );
+    Engine::hge()->Channel_SlideTo( m_channel, 6.5f, 100 );
 }
 
 //------------------------------------------------------------------------------
@@ -430,8 +431,9 @@ Game::render()
                                   vp->screen().y * 0.5f - 20.0f,
                                   vp->screen().x,
                                   vp->screen().y * 0.5f + 20.0f  );
+        int time( static_cast<int>( 10.0f * ( m_gameInTimer / 6.5f ) + 1.0f ) );
         font->printf( vp->screen().x * 0.5f, vp->screen().y * 0.5f - 15.0f,
-                      HGETEXT_CENTER, MESSAGE[m_message] );
+                      HGETEXT_CENTER, MESSAGE[m_message], time );
     }
 
     vp->setTransform();
