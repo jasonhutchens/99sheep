@@ -315,35 +315,25 @@ Game::update( float dt )
     }
     else
     {
-        if ( ( Engine::hge()->Input_KeyDown( HGEK_Q ) ||
-               hge->Input_GetMouseWheel() < 0 ) )
+        if ( Engine::hge()->Input_KeyDown( HGEK_Q ) ||
+             Engine::hge()->Input_KeyDown( HGEK_E ) ||
+             Engine::hge()->Input_KeyDown( HGEK_SPACE ) ||
+             Engine::hge()->Input_KeyDown( HGEK_RBUTTON ) ||
+             hge->Input_GetMouseWheel() != 0 )
         {
-            m_black = true;
-            setColour( 0xFFFFFFFF );
-            setBorder( 0xFF000000 );
-            m_fujin->setBlack( true );
+            m_black = ! m_black;
+            m_fujin->setBlack( m_black );
+            if ( m_black )
+            {
+                setColour( 0xFFFFFFFF );
+                setBorder( 0xFF000000 );
+            }
+            else
+            {
+                setColour( 0xFF000000 );
+                setBorder( 0xFFFFFFFF );
+            }
         }
-        else if ( ( Engine::hge()->Input_KeyDown( HGEK_E ) ||
-                    hge->Input_GetMouseWheel() > 0 ) )
-        {
-            m_black = false;
-            setColour( 0xFF000000 );
-            setBorder( 0xFFFFFFFF );
-            m_fujin->setBlack( false );
-        }
-    }
-
-    if ( ZOOM[m_zoom] > m_last_zoom )
-    {
-        m_last_zoom += ( ZOOM[m_zoom] - m_last_zoom ) * dt * 10.0f;
-        vp->setScale( m_last_zoom );
-        m_fujin->setScale( FUJIN / m_last_zoom );
-    }
-    else if ( ZOOM[m_zoom] < m_last_zoom )
-    {
-        m_last_zoom += ( ZOOM[m_zoom] - m_last_zoom ) * dt * 10.0f;
-        vp->setScale( m_last_zoom );
-        m_fujin->setScale( FUJIN / m_last_zoom );
     }
 
     vp->centre() = m_fujin->getBody()->GetPosition();

@@ -122,7 +122,7 @@ Bullet::doUpdate( float dt )
 {
     m_lifetime += dt;
 
-    if ( m_lifetime > 2.0f )
+    if ( m_lifetime > 0.8f )
     {
         destroy();
         return;

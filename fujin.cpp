@@ -259,7 +259,7 @@ Fujin::doUpdate( float dt )
     }
     if ( shoot.LengthSquared() > 0.2f && m_bullet_timer <= 0.0f )
     {
-        m_bullet_timer = 0.01f;
+        m_bullet_timer = 0.05f;
         Bullet * bullet( static_cast< Bullet * >( Engine::em()->factory( Bullet::TYPE ) ) );
         if ( m_black )
         {
@@ -275,7 +275,10 @@ Fujin::doUpdate( float dt )
         b2Vec2 velocity( 0.0f, 0.0f );
         velocity = 80.0f * shoot;
         velocity.y *= -1.0f;
-//      velocity += m_body->GetLinearVelocity();
+        if ( pad.isConnected() )
+        {
+            velocity += m_body->GetLinearVelocity();
+        }
         bullet->getBody()->SetLinearVelocity( velocity );
         b2Vec2 position( m_body->GetPosition() );
         bullet->getBody()->SetXForm( position, 0.0f );
