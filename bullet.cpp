@@ -86,7 +86,7 @@ Bullet::onSetScale()
     }
     b2CircleDef shapeDef;
     shapeDef.radius = 0.25f * 0.5f * 0.5f * m_sprite->GetWidth() * m_scale;
-    shapeDef.density = 1.0f;
+    shapeDef.density = 0.01f;
     shapeDef.friction = 0.1f;
     shapeDef.restitution = 0.5f;
     m_body->CreateShape( & shapeDef );

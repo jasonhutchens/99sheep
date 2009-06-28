@@ -166,6 +166,10 @@ Fujin::doUpdate( float dt )
 
         acceleration = pad.getStick( XPAD_THUMBSTICK_LEFT );
         shoot = pad.getStick( XPAD_THUMBSTICK_RIGHT );
+        if ( shoot.LengthSquared() > 0.9f )
+        {
+            shoot.Normalize();
+        }
 
 		if( pad.getButtonState( XPAD_BUTTON_DPAD_UP ) )
 		{
@@ -257,7 +261,7 @@ Fujin::doUpdate( float dt )
     {
         m_bullet_timer = 0.0f;
     }
-    if ( shoot.LengthSquared() > 0.2f && m_bullet_timer <= 0.0f )
+    if ( shoot.LengthSquared() > 0.9f && m_bullet_timer <= 0.0f )
     {
         m_bullet_timer = 0.05f;
         Bullet * bullet( static_cast< Bullet * >( Engine::em()->factory( Bullet::TYPE ) ) );

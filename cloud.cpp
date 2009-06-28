@@ -176,8 +176,8 @@ Cloud::doInit()
     m_body->m_linearDamping = 0.0f;
     if ( m_size == 0 )
     {
-        m_body->m_linearDamping = 0.9f;
-        m_body->m_angularDamping = 0.6f;
+        m_body->m_linearDamping = 0.99f;
+        m_body->m_angularDamping = 0.8f;
     }
     m_body->m_angularDamping = 0.0f;
     float spin( 5.0f / static_cast<float>(m_size + 1.0f) );
