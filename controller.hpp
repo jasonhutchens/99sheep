@@ -35,6 +35,7 @@ class Controller
                  float duration = 0.1f ) const;
 
   private:
+    bool m_supported;
     XPad_ControllerState m_pad;
     bool m_buttons[XPAD_NUM_BUTTONS];
     mutable b2Vec2 m_stick[2];

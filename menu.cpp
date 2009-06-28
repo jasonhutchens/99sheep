@@ -89,7 +89,6 @@ Menu::update( float dt )
         case CTRL_HOME:
         {
             hge->System_Launch( "http://rockethands.com/99sheep" );
-            break;
         }
         case CTRL_EXIT:
         {
