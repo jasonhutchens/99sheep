@@ -725,7 +725,7 @@ Engine::_initGraphics()
     m_hge->System_SetState( HGE_FRAMEFUNC, s_update );
     m_hge->System_SetState( HGE_RENDERFUNC, s_render );
     m_hge->System_SetState( HGE_EXITFUNC, s_exit );
-    m_hge->System_SetState( HGE_TITLE, "+++ 9 9 S H E E P v0.8 +++" );
+    m_hge->System_SetState( HGE_TITLE, "+++ 9 9 S H E E P v0.9 +++" );
     m_hge->System_SetState( HGE_ICON, MAKEINTRESOURCE( IDI_ICON1 ) );
     m_hge->System_SetState( HGE_SHOWSPLASH, false );
     m_hge->System_SetState( HGE_FPS, HGEFPS_UNLIMITED );

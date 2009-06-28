@@ -83,8 +83,8 @@ Sprite title
 Sprite developer
 {
     texture=developer
-    rect=0,0,380,340
-    hotspot=190,170
+    rect=0,0,420,390
+    hotspot=210,195
 }
 Sprite cursor
 {

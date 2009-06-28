@@ -24,7 +24,7 @@ Config::Config()
 #else
     vibrate( true ),
 #endif
-    leaderboard( true )
+    leaderboard( false )
 {
 }
 

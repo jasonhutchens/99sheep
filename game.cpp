@@ -95,10 +95,10 @@ Game::init()
 
     m_last_zoom = 1.0f;
     m_gameOutTimer = 0.0f;
-    m_gameInTimer = 6.5f;
+    m_gameInTimer = 3.0f;
     m_zoom = 0;
 
-    m_timeRemaining = 99;
+    m_timeRemaining = 99.0f;
     m_score = 0;
     Engine::em()->init();
 
@@ -175,7 +175,8 @@ Game::init()
     m_timer = 0.0f;
     HEFFECT music = rm->GetEffect( "game" );
     m_channel = Engine::hge()->Effect_PlayEx( music, 0, 0, 0, false );
-    Engine::hge()->Channel_SlideTo( m_channel, 6.5f, 100 );
+    Engine::hge()->Channel_SetPos( m_channel, 3.65f );
+    Engine::hge()->Channel_SlideTo( m_channel, 3.0f, 100 );
 }
 
 //------------------------------------------------------------------------------
@@ -250,6 +251,10 @@ Game::update( float dt )
     }
 
     m_timeRemaining -= dt;
+    if ( m_timeRemaining < 0.0f )
+    {
+        m_timeRemaining = 0.0f;
+    }
 
     Engine::em()->update( dt );
 
@@ -354,21 +359,10 @@ Game::render()
     hgeFont* font = Engine::rm()->GetFont("menu");
     b2Vec2 timeTextLocation (700,10);
     b2Vec2 scoreTextLocation(0,10);
-    char timeRemainingText[10];
+    char timeRemainingText[64];
     char scoreText[64];
-    sprintf_s(timeRemainingText,"%02.2f",m_timeRemaining);
-    if ( m_fujin->getScore() == 0 )
-    {
-        sprintf_s( scoreText, "No Friends" ); 
-    }
-    else if ( m_fujin->getScore() == 1 )
-    {
-        sprintf_s( scoreText, "1 Friend" ); 
-    }
-    else
-    {
-        sprintf_s( scoreText, "%d Friends", m_fujin->getScore() ); 
-    }
+    sprintf_s(timeRemainingText,"Time: %02d",static_cast<int>(m_timeRemaining+0.9f));
+    sprintf_s(scoreText, "Sheep: %02d", m_fujin->getScore() ); 
 
     ViewPort * vp( Engine::vp() );
     
@@ -417,11 +411,9 @@ Game::render()
         font->SetColor( 0xFFFFFFFF );
     }
 
-    /*
     font->printf( vp->screen().x * 0.5f, 10.0f, HGETEXT_CENTER, timeRemainingText );
     font->printf( vp->screen().x * 0.5f, vp->screen().y - 40.0f,
                   HGETEXT_CENTER, scoreText); 
-                  */
 
     if ( ( m_gameInTimer > 0.0f || m_gameOutTimer > 0.0f ) &&
          ! Engine::instance()->isPaused() )
@@ -437,7 +429,7 @@ Game::render()
                                   vp->screen().y * 0.5f - 20.0f,
                                   vp->screen().x,
                                   vp->screen().y * 0.5f + 20.0f  );
-        int time( static_cast<int>( 10.0f * ( m_gameInTimer / 6.5f ) + 1.0f ) );
+        int time( static_cast<int>( m_gameInTimer + 0.9f ) );
         font->printf( vp->screen().x * 0.5f, vp->screen().y * 0.5f - 15.0f,
                       HGETEXT_CENTER, MESSAGE[m_message], time );
     }
