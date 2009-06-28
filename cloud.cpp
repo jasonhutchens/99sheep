@@ -32,11 +32,11 @@ namespace
         "black_sheep_512",
     };
     const float DAMAGE[] = {
+        1.0f,
+        20.0f,
         10.0f,
-        8.0f,
-        4.0f,
-        2.0f,
-        1.0f
+        5.0f,
+        2.0f
     };
     const float SPEED[] = {
         20.0f,
@@ -75,9 +75,9 @@ Cloud::collide( Entity * entity, b2ContactPoint * point )
     {
         takeDamage( DAMAGE[ m_size ] );
     }
-    else if ( m_size > 0 )
+    else if ( m_size > 0 && m_size < 4 )
     {
-        addStrength( DAMAGE[ m_size ] );
+        addStrength( DAMAGE[ m_size + 1 ] );
     }
     entity->destroy();
 }
