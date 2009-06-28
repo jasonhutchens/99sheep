@@ -154,6 +154,11 @@ Fujin::doUpdate( float dt )
     b2Vec2 acceleration( 0.0f, 0.0f );
     b2Vec2 shoot( 0.0f, 0.0f );
 
+    // TODO: Acceleration gives ideal direction
+    //       Turn towards this at some rate
+    //       Force is proportional to how close to ideal
+    //       Just thrust in direction
+
     updateDamageable( dt );
 
     if ( Engine::instance()->isPaused() )
@@ -173,7 +178,7 @@ Fujin::doUpdate( float dt )
 
 		if( pad.getButtonState( XPAD_BUTTON_DPAD_UP ) )
 		{
-            acceleration.y += 1.0f;
+            acceleration.y = 1.0f;
 		}
 		if( pad.getButtonState( XPAD_BUTTON_DPAD_DOWN ) )
 		{
@@ -249,11 +254,6 @@ Fujin::doUpdate( float dt )
 
         m_friends.push_back( cloud );
         m_join.pop_back();
-    }
-
-    if ( Engine::instance()->getConfig().vibrate )
-    {
-        //Engine::instance()->getController().rumble( force, force, 0.1f );
     }
 
     m_bullet_timer -= dt;

@@ -271,11 +271,15 @@ Game::update( float dt )
     {
         if ( m_gameOutTimer <= 0.0f )
         {
+            m_gameOutTimer = 4.0f;
+            if ( Engine::instance()->getConfig().vibrate )
+            {
+                Engine::instance()->getController().rumble( 1.0f, 1.0f, 0.2f );
+            }
             if (m_timer < 103.0f )
             {
                 Engine::hge()->Channel_SetPos( m_channel, 105.0f );
             }
-            m_gameOutTimer = 4.0f;
             if ( score >= 99 )
             {
                 m_message = 4;
