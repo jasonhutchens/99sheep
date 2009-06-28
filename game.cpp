@@ -39,10 +39,11 @@ namespace
         return false;
     }
 
-    const char * MESSAGE[4] = {
+    const char * MESSAGE[5] = {
         "Get Ready: %02d",
         "Game Over",
         "Time Gone",
+        "Sheep Gone",
         "Goal Get!"
     };
 }
@@ -263,7 +264,10 @@ Game::update( float dt )
         return false;
     }
 
-    if ( m_fujin->isDestroyed() || score >= 99 || m_timeRemaining <= 0.0f )
+    int num_sheep( Engine::em()->getEntities( Cloud::TYPE ).size() );
+
+    if ( m_fujin->isDestroyed() || score >= 99 || num_sheep == score ||
+         m_timeRemaining <= 0.0f )
     {
         if ( m_gameOutTimer <= 0.0f )
         {
@@ -273,6 +277,10 @@ Game::update( float dt )
             }
             m_gameOutTimer = 4.0f;
             if ( score >= 99 )
+            {
+                m_message = 4;
+            }
+            else if ( num_sheep == score )
             {
                 m_message = 3;
             }
