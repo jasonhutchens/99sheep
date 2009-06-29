@@ -763,7 +763,12 @@ Engine::_setBestScreenMode()
     int desired_bpp( m_config.bpp );
     while ( EnumDisplaySettings( NULL, index++, & dm ) != 0 )
     {
-        // If it's the first time through the loop, or if we find an exact
+        // Don't consider anything less than 800x600
+		if ( dm.dmPelsWidth < 800 || dm.dmPelsHeight < 600 )
+		{
+			continue;
+		}
+		// If it's the first time through the loop, or if we find an exact
         // match with the settings we want, then remember them.
         if ( width <= 0.0f || m_config.bpp == dm.dmBitsPerPel &&
                               m_config.screenWidth == dm.dmPelsWidth &&

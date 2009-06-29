@@ -39,10 +39,10 @@ Menu::init()
     m_gui = new hgeGUI();
     float cx( 0.5f * vp->screen().x );
     float cy( 0.5f * vp->screen().y - 70 );
-    m_gui->AddCtrl( new MenuItem( CTRL_START, cx, cy + 30, "Start", m_font ) );
-    m_gui->AddCtrl( new MenuItem( CTRL_SCORE, cx, cy + 80, label, m_font ) );
-    m_gui->AddCtrl( new MenuItem( CTRL_HOME, cx, cy + 130, "Home Page", m_font ) );
-    m_gui->AddCtrl( new MenuItem( CTRL_EXIT, cx, cy + 200, "Exit", m_font ) );
+    m_gui->AddCtrl( new MenuItem( CTRL_START, cx, cy + 35, "Start", m_font ) );
+    m_gui->AddCtrl( new MenuItem( CTRL_SCORE, cx, cy + 85, label, m_font ) );
+    m_gui->AddCtrl( new MenuItem( CTRL_HOME, cx, cy + 135, "Home Page", m_font ) );
+    m_gui->AddCtrl( new MenuItem( CTRL_EXIT, cx, cy + 185, "Exit", m_font ) );
     m_gui->SetNavMode( HGEGUI_UPDOWN );
     m_gui->SetFocus( Engine::instance()->getConfig().menu );
     m_gui->Enter();
