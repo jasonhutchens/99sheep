@@ -26,6 +26,10 @@ Damageable::~Damageable()
 void
 Damageable::updateDamageable( float dt )
 {
+    if ( m_damage > m_max_strength )
+    {
+        m_strength = -1.0f;
+    }
     if ( m_damage > 0.0f )
     {
         float dd( 100.0f * dt );

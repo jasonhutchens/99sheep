@@ -32,7 +32,7 @@ namespace
         "black_sheep_512",
     };
     const float DAMAGE[] = {
-        1.0f,
+        100.0f,
         20.0f,
         10.0f,
         5.0f,
