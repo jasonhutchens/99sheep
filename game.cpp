@@ -304,8 +304,6 @@ Game::update( float dt )
     {
         if ( pad.buttonDown( XPAD_BUTTON_LEFT_SHOULDER ) ||
              pad.buttonDown( XPAD_BUTTON_RIGHT_SHOULDER ) ||
-             pad.buttonDown( XPAD_BUTTON_LEFT_THUMB ) ||
-             pad.buttonDown( XPAD_BUTTON_RIGHT_THUMB ) ||
              pad.buttonDown( XPAD_BUTTON_BUTTON_Y ) ||
              pad.buttonDown( XPAD_BUTTON_X ) ||
              pad.buttonDown( XPAD_BUTTON_B ) ||
@@ -407,15 +405,21 @@ Game::render()
     if ( m_black )
     {
         font->SetColor( 0xFF000000 );
+        m_overlay->SetColor( 0xAAFFFFFF );
     }
     else
     {
         font->SetColor( 0xFFFFFFFF );
+        m_overlay->SetColor( 0xAA000000 );
     }
 
-    font->printf( vp->screen().x * 0.5f, 10.0f, HGETEXT_CENTER, timeRemainingText );
-    font->printf( vp->screen().x * 0.5f, vp->screen().y - 40.0f,
-                  HGETEXT_CENTER, scoreText); 
+    float x( vp->screen().x * 0.5f );
+    float y( 10.0f );
+    m_overlay->RenderStretch( x - 60.0f, y, x + 60.0f, y + 26.0f );
+    font->printf( x, y, HGETEXT_CENTER, timeRemainingText );
+    y = vp->screen().y - 40.0f;
+    m_overlay->RenderStretch( x - 60.0f, y, x + 60.0f, y + 26.0f );
+    font->printf( x, y, HGETEXT_CENTER, scoreText); 
 
     if ( ( m_gameInTimer > 0.0f || m_gameOutTimer > 0.0f ) &&
          ! Engine::instance()->isPaused() )
