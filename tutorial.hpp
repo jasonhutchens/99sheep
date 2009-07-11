@@ -7,6 +7,8 @@
 
 #include <context.hpp>
 
+class Fujin;
+
 //------------------------------------------------------------------------------
 class Tutorial : public Context
 {
@@ -23,6 +25,10 @@ class Tutorial : public Context
     virtual void fini();
     virtual bool update( float dt );
     virtual void render();
+
+  private:
+    void _initArena();
+    Fujin * m_fujin;
 };
 
 #endif

@@ -158,7 +158,7 @@ Engine::start()
         _loadData();
         init();
 #ifdef _DEBUG
-        switchContext( STATE_GAME );
+        switchContext( STATE_HELP );
 #else
         switchContext( STATE_SPLASH );
 #endif
@@ -495,7 +495,7 @@ bool
 Engine::_loseFocus()
 {
 #ifndef _DEBUG
-    m_paused = ( m_state == STATE_GAME );
+    m_paused = ( m_state == STATE_GAME || m_state == STATE_HELP );
 #endif
     return false;
 }
@@ -521,7 +521,7 @@ Engine::_update()
 {
     float dt( m_hge->Timer_GetDelta() );
 
-    if ( m_state == STATE_GAME )
+    if ( m_state == STATE_GAME || m_state == STATE_HELP )
     {
         if ( m_hge->Input_KeyDown( HGEK_P ) ||
              m_hge->Input_KeyDown( HGEK_ESCAPE ) )

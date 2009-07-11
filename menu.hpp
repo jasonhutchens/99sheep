@@ -18,7 +18,8 @@ enum Control
     CTRL_START = 1,
     CTRL_SCORE = 2,
     CTRL_HOME = 3,
-    CTRL_EXIT = 4
+    CTRL_EXIT = 4,
+    CTRL_HELP = 5
 };
 
 //------------------------------------------------------------------------------

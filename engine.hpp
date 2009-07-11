@@ -30,7 +30,7 @@ enum EngineState
     STATE_NONE = -1, 
     STATE_SPLASH = 0,
     STATE_MENU = 1,
-    STATE_TUTORIAL = 2,
+    STATE_HELP = 2,
     STATE_GAME = 3,
     STATE_SCORE = 4,
     STATE_CREDITS

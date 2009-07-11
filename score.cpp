@@ -291,22 +291,22 @@ Score::render()
         {
             if ( config.leaderboard && ! m_error )
             {
-                font->printf( cx, 60.0f, HGETEXT_CENTER,
+                font->printf( cx, 30.0f, HGETEXT_CENTER,
                               "G L O B A L   P E E P S" );
             }
             else
             {
-                font->printf( cx, 60.0f, HGETEXT_CENTER,
+                font->printf( cx, 30.0f, HGETEXT_CENTER,
                               "L O C A L   P E E P S" );
             }
             if ( m_error )
             {
-                font->printf( cx, 2.0f * cy - 90.0f, HGETEXT_CENTER,
+                font->printf( cx, 2.0f * cy - 60.0f, HGETEXT_CENTER,
                               "... unable to access online leaderboard ..." );
             }
             else
             {
-                font->printf( cx, 2.0f * cy - 90.0f, HGETEXT_CENTER,
+                font->printf( cx, 2.0f * cy - 60.0f, HGETEXT_CENTER,
                               "Y O U   H E R D   P R O P E R L Y" );
             }
             if ( config.leaderboard )
@@ -318,9 +318,9 @@ Score::render()
                 }
             }
             font->SetColor( 0xCCFFFFFF );
-            Engine::hge()->Gfx_SetClipping( 10, 120,
+            Engine::hge()->Gfx_SetClipping( 10, 60,
                 static_cast< int >( Engine::vp()->screen().x ) - 20,
-                static_cast< int >( Engine::vp()->screen().y ) - 250 );
+                static_cast< int >( Engine::vp()->screen().y ) - 90 );
             std::vector< ScoreData >::iterator j( m_high_score.begin() );
             float my( 0.0f );
             for( int i = 0; j != m_high_score.end(); ++i, ++j )
@@ -368,10 +368,12 @@ Score::render()
                     break;
                 }
             }
+            /*
             if ( my + m_dy < Engine::vp()->screen().y - 160.0f )
             {
                 m_dy = Engine::vp()->screen().y - 160.0f - my;
             }
+            */
             Engine::hge()->Gfx_SetClipping();
             break;
         }

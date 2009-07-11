@@ -38,11 +38,20 @@ Menu::init()
     m_font = rm->GetFont( "menu" );
     m_gui = new hgeGUI();
     float cx( 0.5f * vp->screen().x );
-    float cy( 0.5f * vp->screen().y - 70 );
-    m_gui->AddCtrl( new MenuItem( CTRL_START, cx, cy + 35, "Start", m_font ) );
-    m_gui->AddCtrl( new MenuItem( CTRL_SCORE, cx, cy + 85, label, m_font ) );
-    m_gui->AddCtrl( new MenuItem( CTRL_HOME, cx, cy + 135, "Home Page", m_font ) );
-    m_gui->AddCtrl( new MenuItem( CTRL_EXIT, cx, cy + 185, "Exit", m_font ) );
+    float cy( 0.5f * vp->screen().y );
+    float dy( 0.15f * cy );
+    float ty( cy - 1.5f * dy );
+
+    m_gui->AddCtrl( new MenuItem( CTRL_HELP, cx, ty, "Tutorial", m_font ) );
+    ty += dy;
+    m_gui->AddCtrl( new MenuItem( CTRL_START, cx, ty, "Start", m_font ) );
+    ty += dy;
+    m_gui->AddCtrl( new MenuItem( CTRL_SCORE, cx, ty, label, m_font ) );
+    ty += dy;
+    m_gui->AddCtrl( new MenuItem( CTRL_HOME, cx, ty, "Home Page", m_font ) );
+    ty += dy;
+    m_gui->AddCtrl( new MenuItem( CTRL_EXIT, cx, ty, "Exit", m_font ) );
+
     m_gui->SetNavMode( HGEGUI_UPDOWN );
     m_gui->SetFocus( Engine::instance()->getConfig().menu );
     m_gui->Enter();
@@ -52,6 +61,7 @@ Menu::init()
 void
 Menu::fini()
 {
+    m_gui->DelCtrl( CTRL_HELP );
     m_gui->DelCtrl( CTRL_START );
     m_gui->DelCtrl( CTRL_SCORE );
     m_gui->DelCtrl( CTRL_HOME );
@@ -76,6 +86,11 @@ Menu::update( float dt )
     switch ( static_cast< Control >( engine->updateGUI( dt, m_gui,
                                      engine->getConfig().menu, 4 ) ) )
     {
+        case CTRL_HELP:
+        {
+            Engine::instance()->switchContext( STATE_HELP );
+            break;
+        }
         case CTRL_START:
         {
             Engine::instance()->switchContext( STATE_GAME );
@@ -108,11 +123,11 @@ Menu::render()
 
     m_gui->Render();
     float cx( 0.5f * vp->screen().x );
-    rm->GetSprite( "title" )->Render( cx, 100.0f );
+    rm->GetSprite( "title" )->Render( cx, 60.0f );
 
     hgeFont * font( rm->GetFont( "menu" ) );
     font->SetColor( 0xFFFFFFFF );
-    font->printf( cx, 150.0f, HGETEXT_CENTER, "A RocketHands Experiment by Lloyd Kranzky" );
+    font->printf( cx, 110.0f, HGETEXT_CENTER, "A RocketHands Experiment by Lloyd Kranzky" );
     font->printf( cx, vp->screen().y - 70.0f, HGETEXT_CENTER, "Copyright (c) 2009 RocketHands Pty. Ltd.  All rights reserved." );
     font->printf( cx, vp->screen().y - 40.0f, HGETEXT_CENTER, "http://rockethands.com/99sheep" );
 }
