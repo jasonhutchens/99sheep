@@ -158,7 +158,7 @@ Engine::start()
         _loadData();
         init();
 #ifdef _DEBUG
-        switchContext( STATE_HELP );
+        switchContext( STATE_SCORE );
 #else
         switchContext( STATE_SPLASH );
 #endif

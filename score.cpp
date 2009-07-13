@@ -212,10 +212,6 @@ Score::update( float dt )
                     m_dy += offset.y * dt * 300.0f;
                 }
             }
-                if ( m_dy > 0.0f )
-                {
-                    m_dy = 0.0f;
-                }
             if ( hge->Input_GetKeyState( HGEK_S ) ||
                  hge->Input_GetKeyState( HGEK_DOWN ) )
             {
@@ -237,6 +233,16 @@ Score::update( float dt )
             {
                 Engine::instance()->switchContext( STATE_MENU );
                 return false;
+            }
+            if ( m_dy > 0.0f )
+            {
+                m_dy = 0.0f;
+            }
+            float lim( m_high_score.size() * -30.0f +
+                       static_cast< int >( Engine::vp()->screen().y ) - 120 );
+            if ( m_dy < lim )
+            {
+                m_dy = lim;
             }
             break;
         }
@@ -318,15 +324,17 @@ Score::render()
                 }
             }
             font->SetColor( 0xCCFFFFFF );
-            Engine::hge()->Gfx_SetClipping( 10, 60,
+            int wo( static_cast< int >( Engine::vp()->getWidthOffset() ) );
+            int ho( static_cast< int >( Engine::vp()->getHeightOffset() ) );
+            Engine::hge()->Gfx_SetClipping( 10 + wo, 60 + ho,
                 static_cast< int >( Engine::vp()->screen().x ) - 20,
-                static_cast< int >( Engine::vp()->screen().y ) - 90 );
+                static_cast< int >( Engine::vp()->screen().y ) - 120 );
             std::vector< ScoreData >::iterator j( m_high_score.begin() );
             float my( 0.0f );
             for( int i = 0; j != m_high_score.end(); ++i, ++j )
             {
-                my = cy - 180.0f + i * 30.0f;
-                if ( my + m_dy < 100.0f )
+                my = 60.0f + i * 30.0f;
+                if ( my + m_dy < 0.0f )
                 {
                     continue;
                 }
@@ -363,7 +371,7 @@ Score::render()
                               "%d", j->value );
                 font->printf( cx + 120.0f, my + m_dy, HGETEXT_LEFT,
                               "%s", j->timestamp.c_str() );
-                if ( my + m_dy > Engine::vp()->screen().y )
+                if ( my + m_dy > Engine::vp()->screen().y - 60.0f )
                 {
                     break;
                 }
