@@ -84,7 +84,7 @@ Menu::update( float dt )
     }
 
     switch ( static_cast< Control >( engine->updateGUI( dt, m_gui,
-                                     engine->getConfig().menu, 4 ) ) )
+                                     engine->getConfig().menu, 5 ) ) )
     {
         case CTRL_HELP:
         {

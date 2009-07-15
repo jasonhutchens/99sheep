@@ -388,7 +388,6 @@ Game::render()
         Entity * entity( * i );
         entity->render( scale );
     }
-    // render time remaining
     Engine::vp()->reset();
 
     std::string progressText;

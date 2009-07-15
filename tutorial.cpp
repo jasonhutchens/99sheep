@@ -59,6 +59,8 @@ Tutorial::init()
     hgeResourceManager * rm( Engine::rm() );
     ViewPort * vp( Engine::vp() );
 
+    notifyOnCollision( true );
+
     Fujin::registerEntity();
     Bullet::registerEntity();
     Girder::registerEntity();
@@ -95,6 +97,7 @@ Tutorial::init()
 void
 Tutorial::fini()
 {
+    notifyOnCollision( false );
     Engine::instance()->getConfig().menu = 2;
     Engine::em()->fini();
 }
@@ -148,9 +151,16 @@ Tutorial::render()
         Entity * entity( * i );
         entity->render( scale );
     }
-    // render time remaining
     Engine::vp()->reset();
     vp->setTransform();
+}
+
+//------------------------------------------------------------------------------
+bool
+Tutorial::shouldCollide( Entity * left, Entity * right )
+{
+    return ( left->getType() == Girder::TYPE ||
+             right->getType() == Girder::TYPE );
 }
 
 //------------------------------------------------------------------------------

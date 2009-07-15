@@ -25,6 +25,7 @@ class Tutorial : public Context
     virtual void fini();
     virtual bool update( float dt );
     virtual void render();
+    virtual bool shouldCollide( Entity * left, Entity * right );
 
   private:
     void _initArena();
