@@ -151,11 +151,7 @@ Fujin::doUpdate( float dt )
 	
 	const Mouse::MouseButton & leftMouseBtn(mouse.getLeft());
 
-    // This is the *desired* velocity vector. We turn and accelerate to
-    // approximate it, within the limits of what we can do.
     b2Vec2 speed( 0.0f, 0.0f );
-    // This is the direction that we want to shoot in. A small length won't
-    // cause a bullet to fire (dead zone on controller).
     b2Vec2 shoot( 0.0f, 0.0f );
 
     updateDamageable( dt );
@@ -228,7 +224,7 @@ Fujin::doUpdate( float dt )
     {
         shoot.SetZero();
     }
-    if ( speed.LengthSquared() > 0.9f )
+    if ( speed.LengthSquared() > 0.1f )
     {
         speed.Normalize();
     }
@@ -266,6 +262,28 @@ Fujin::doUpdate( float dt )
         m_join.pop_back();
     }
 
+    // Find the difference between our current and desired angles
+    b2Vec2 vertical( 0.0f, -1.0f );
+    b2Mat22 rotation( m_body->GetAngle() );
+    b2Vec2 heading( b2Mul( rotation, vertical ) );
+    speed.y *= -1.0f;
+    if ( speed.LengthSquared() > 0.1f )
+    {
+        float angle( acosf( b2Dot( heading, speed ) ) );
+        float thrust( 60.0f * ( ( M_PI - angle ) / M_PI ) );
+        if ( b2Cross( heading, speed ) < 0.0f )
+        {
+            angle = -angle;
+        } 
+	    m_body->SetAngularVelocity( 10.0f * angle );
+        m_body->SetLinearVelocity( thrust * heading );
+    }
+    else
+    {
+	    m_body->SetAngularVelocity( 0.0f );
+        m_body->SetLinearVelocity( b2Vec2_zero );
+    }
+
     m_bullet_timer -= dt;
     if ( m_bullet_timer < 0.0f )
     {
@@ -289,34 +307,12 @@ Fujin::doUpdate( float dt )
         b2Vec2 velocity( 0.0f, 0.0f );
         velocity = 80.0f * shoot;
         velocity.y *= -1.0f;
-        if ( pad.isConnected() )
-        {
-            velocity += m_body->GetLinearVelocity();
-        }
         bullet->getBody()->SetLinearVelocity( velocity );
         b2Vec2 position( m_body->GetPosition() );
-        bullet->getBody()->SetXForm( position, 0.0f );
+        position = position + heading;
+        bullet->getBody()->SetXForm( position, m_body->GetAngle() );
     }
 
-	bool dead( speed.LengthSquared() < 0.1f );
-    speed.y *= -1.0f;
-    b2Vec2 velocity( m_body->GetLinearVelocity() );
-    float angle = lookAt( velocity );
-    velocity = 40.0f * speed;
-	if ( dead )
-	{
-	    velocity *= 0.0f;
-	}
-	m_body->SetAngularVelocity( 0.0f );
-    m_body->SetLinearVelocity( velocity );
-
-	b2Vec2 position( m_body->GetPosition() );
-	b2Vec2 direction( 0.3f, 1.0f );
-	direction = b2Mul( m_body->GetXForm().R, -direction );
-	position = position + 64.0f * m_scale * direction;
-	position = m_body->GetPosition() - 64.0f * m_scale * direction;
-    angle = m_body->GetAngle();
-		
     if ( getBlack() )
     {
         m_sprite = Engine::rm()->GetSprite( "black_ship" );
