@@ -151,13 +151,12 @@ Fujin::doUpdate( float dt )
 	
 	const Mouse::MouseButton & leftMouseBtn(mouse.getLeft());
 
-    b2Vec2 acceleration( 0.0f, 0.0f );
+    // This is the *desired* velocity vector. We turn and accelerate to
+    // approximate it, within the limits of what we can do.
+    b2Vec2 speed( 0.0f, 0.0f );
+    // This is the direction that we want to shoot in. A small length won't
+    // cause a bullet to fire (dead zone on controller).
     b2Vec2 shoot( 0.0f, 0.0f );
-
-    // TODO: Acceleration gives ideal direction
-    //       Turn towards this at some rate
-    //       Force is proportional to how close to ideal
-    //       Just thrust in direction
 
     updateDamageable( dt );
 
@@ -169,28 +168,24 @@ Fujin::doUpdate( float dt )
     {
 		Engine::instance()->hideMouse();
 
-        acceleration = pad.getStick( XPAD_THUMBSTICK_LEFT );
+        speed = pad.getStick( XPAD_THUMBSTICK_LEFT );
         shoot = pad.getStick( XPAD_THUMBSTICK_RIGHT );
-        if ( shoot.LengthSquared() > 0.9f )
-        {
-            shoot.Normalize();
-        }
 
 		if( pad.getButtonState( XPAD_BUTTON_DPAD_UP ) )
 		{
-            acceleration.y = 1.0f;
+            speed.y = 1.0f;
 		}
 		if( pad.getButtonState( XPAD_BUTTON_DPAD_DOWN ) )
 		{
-            acceleration.y -= 1.0f;
+            speed.y = -1.0f;
 		}
 		if( pad.getButtonState( XPAD_BUTTON_DPAD_LEFT ) )
 		{
-            acceleration.x -= 1.0f;
+            speed.x = -1.0f;
 		}
 		if( pad.getButtonState( XPAD_BUTTON_DPAD_RIGHT ) )
 		{
-            acceleration.x += 1.0f;
+            speed.x = 1.0f;
 		}
     }
 	else
@@ -199,19 +194,19 @@ Fujin::doUpdate( float dt )
 
 		if(Engine::hge()->Input_GetKeyState(HGEK_W))
 		{
-            acceleration.y += 1.0f;
+            speed.y = 1.0f;
 		}
 		if (Engine::hge()->Input_GetKeyState(HGEK_S))
 		{
-            acceleration.y -= 1.0f;
+            speed.y = -1.0f;
 		}
 		if (Engine::hge()->Input_GetKeyState(HGEK_A))
 		{
-            acceleration.x -= 1.0f;
+            speed.x = -1.0f;
 		}
 		if (Engine::hge()->Input_GetKeyState(HGEK_D))
 		{
-            acceleration.x += 1.0f;
+            speed.x = 1.0f;
 		}
 
 		b2Vec2 position (m_body->GetPosition());
@@ -222,10 +217,25 @@ Fujin::doUpdate( float dt )
         {
             shoot = newPos;
             shoot.y *= -1.0f;
-            shoot.Normalize();
         }
-
 	}
+
+    if ( shoot.LengthSquared() > 0.9f )
+    {
+        shoot.Normalize();
+    }
+    else
+    {
+        shoot.SetZero();
+    }
+    if ( speed.LengthSquared() > 0.9f )
+    {
+        speed.Normalize();
+    }
+    else
+    {
+        speed.SetZero();
+    }
 
     while ( m_join.size() > 0 )
     {
@@ -288,11 +298,11 @@ Fujin::doUpdate( float dt )
         bullet->getBody()->SetXForm( position, 0.0f );
     }
 
-	bool dead( acceleration.LengthSquared() < 0.1f );
-    acceleration.y *= -1.0f;
+	bool dead( speed.LengthSquared() < 0.1f );
+    speed.y *= -1.0f;
     b2Vec2 velocity( m_body->GetLinearVelocity() );
     float angle = lookAt( velocity );
-    velocity = 40.0f * acceleration;
+    velocity = 40.0f * speed;
 	if ( dead )
 	{
 	    velocity *= 0.0f;
