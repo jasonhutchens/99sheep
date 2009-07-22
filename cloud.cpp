@@ -54,7 +54,10 @@ Cloud::Cloud( float scale )
     Damageable( 99.0f ),
     m_size( 0 ),
     m_friend( false ),
-    m_life( 4.0f )
+    m_life( 4.0f ),
+	m_hitSameSnd( 0 ),
+	m_hitDiffSnd( 0 ),
+	m_divideSnd( 0 )
 {
 }
 
@@ -73,10 +76,12 @@ Cloud::collide( Entity * entity, b2ContactPoint * point )
     }
     if ( entity->getBlack() != getBlack() || m_size == 0 )
     {
+		Engine::hge()->Effect_Play(m_hitDiffSnd);
         takeDamage( DAMAGE[ m_size ] );
     }
     else if ( m_size > 0 && m_size < 4 )
     {
+		Engine::hge()->Effect_Play(m_hitSameSnd);
         addStrength( DAMAGE[ m_size + 1 ] );
     }
     entity->destroy();
@@ -186,6 +191,10 @@ Cloud::doInit()
     b2Vec2 velocity( Engine::hge()->Random_Float( -speed, speed ),
                      Engine::hge()->Random_Float( -speed, speed ) );
     m_body->SetLinearVelocity( velocity );
+
+	m_hitSameSnd = Engine::rm()->GetEffect("sheep_hit_same");
+	m_hitDiffSnd = Engine::rm()->GetEffect("sheep_hit_diff");
+	m_divideSnd = Engine::rm()->GetEffect("sheep_divide");
 }
 
 //------------------------------------------------------------------------------
@@ -210,6 +219,7 @@ Cloud::doUpdate( float dt )
     {
         if ( m_size > 0 )
         {
+			Engine::hge()->Effect_Play(m_divideSnd);
             for ( int i = 0; i < 3; ++i )
             {
                 Entity* entity = Engine::em()->factory( Cloud::TYPE );

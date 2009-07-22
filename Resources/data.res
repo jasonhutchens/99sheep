@@ -184,3 +184,43 @@ Sound game
 {
     filename="99sheep.mp3"
 }
+
+Sound menu_nav
+{
+	filename="menu_nav.wav"
+}
+
+Sound menu_select
+{
+	filename="menu_select.wav"
+}
+
+Sound shot_fired
+{
+	filename="shot_fired.wav"
+}
+
+Sound sheep_hit_same
+{
+	filename="sheep_hit.wav"
+}
+
+Sound sheep_hit_diff
+{
+	filename="sheep_hit.wav"
+}
+
+Sound sheep_grow
+{
+	filename="menu_select.wav"
+}
+
+Sound sheep_divide
+{
+	filename="sheep_divide.wav"
+}
+
+Sound sheep_collect
+{
+	filename="sheep_collect.wav"
+}

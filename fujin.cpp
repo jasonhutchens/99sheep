@@ -28,7 +28,9 @@ Fujin::Fujin( float max_strength, float scale )
     m_target_scale( 0.0f ),
     m_bullet_timer( 0.0f ),
     m_join(),
-    m_friends()
+    m_friends(),
+	m_shotSnd( 0 ),
+	m_collectSnd( 0 )
 {
 }
 
@@ -53,6 +55,7 @@ Fujin::collide( Entity * entity, b2ContactPoint * point )
     }
     if ( cloud->getSize() == 0 )
     {
+		Engine::hge()->Effect_Play(m_collectSnd);
         cloud->setFriend( true );
         m_join.push_back( cloud );
     }
@@ -140,6 +143,8 @@ Fujin::doInit()
 
 	const Controller & pad( Engine::instance()->getController() );
 	Engine::instance()->setMouse("cursor");
+	m_shotSnd = Engine::rm()->GetEffect("shot_fired");
+	m_collectSnd = Engine::rm()->GetEffect("sheep_collect");
 }
 
 //------------------------------------------------------------------------------
@@ -311,6 +316,9 @@ Fujin::doUpdate( float dt )
         b2Vec2 position( m_body->GetPosition() );
         position = position + heading;
         bullet->getBody()->SetXForm( position, m_body->GetAngle() );
+
+		//TODO: The bullet should play the sound
+		Engine::hge()->Effect_Play(m_shotSnd);
     }
 
     if ( getBlack() )

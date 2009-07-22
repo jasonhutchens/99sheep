@@ -42,6 +42,8 @@ class Menu : public Context
   private:
     hgeFont * m_font;
     hgeGUI * m_gui;
+	HEFFECT m_navSnd;
+	HEFFECT m_selectSnd;
 };
 
 #endif

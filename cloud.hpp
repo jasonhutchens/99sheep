@@ -45,6 +45,9 @@ class Cloud : public Entity, public Damageable
     int m_size;
     bool m_friend;
     float m_life;
+	HEFFECT m_hitSameSnd;
+	HEFFECT m_hitDiffSnd;
+	HEFFECT m_divideSnd;
 };
 
 #endif

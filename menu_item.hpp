@@ -13,7 +13,7 @@ class hgeFont;
 class MenuItem : public hgeGUIObject
 {
   public:
-    MenuItem( int id, float x, float y, const char * title, hgeFont * font ); 
+    MenuItem( int id, float x, float y, const char * title, hgeFont * font, HEFFECT snd = 0 ); 
 
     virtual void    Render();
     virtual void    Update( float dt );
@@ -29,6 +29,7 @@ class MenuItem : public hgeGUIObject
     hgeFont * m_font;
     const char * m_title;
     bool m_focused;
+	HEFFECT m_snd;
 };
 
 #endif

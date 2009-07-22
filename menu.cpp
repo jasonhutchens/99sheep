@@ -29,6 +29,8 @@ Menu::~Menu()
 void
 Menu::init()
 {
+	
+
     hgeResourceManager * rm( Engine::rm() );
     ViewPort * vp( Engine::vp() );
     Config & config( Engine::instance()->getConfig() );
@@ -42,16 +44,20 @@ Menu::init()
     float dy( 0.15f * cy );
     float ty( cy - 1.5f * dy );
 
-    m_gui->AddCtrl( new MenuItem( CTRL_HELP, cx, ty, "Tutorial", m_font ) );
-    ty += dy;
-    m_gui->AddCtrl( new MenuItem( CTRL_START, cx, ty, "Start", m_font ) );
-    ty += dy;
-    m_gui->AddCtrl( new MenuItem( CTRL_SCORE, cx, ty, label, m_font ) );
-    ty += dy;
-    m_gui->AddCtrl( new MenuItem( CTRL_HOME, cx, ty, "Home Page", m_font ) );
-    ty += dy;
-    m_gui->AddCtrl( new MenuItem( CTRL_EXIT, cx, ty, "Exit", m_font ) );
+	m_navSnd = rm->GetEffect( "menu_nav" );
+	m_selectSnd = rm->GetEffect( "menu_select" );
 
+    m_gui->AddCtrl( new MenuItem( CTRL_HELP, cx, ty, "Tutorial", m_font, m_navSnd ) );
+    ty += dy;
+    m_gui->AddCtrl( new MenuItem( CTRL_START, cx, ty, "Start", m_font, m_navSnd ) );
+    ty += dy;
+    m_gui->AddCtrl( new MenuItem( CTRL_SCORE, cx, ty, label, m_font, m_navSnd ) );
+    ty += dy;
+    m_gui->AddCtrl( new MenuItem( CTRL_HOME, cx, ty, "Home Page", m_font, m_navSnd ) );
+    ty += dy;
+    m_gui->AddCtrl( new MenuItem( CTRL_EXIT, cx, ty, "Exit", m_font, m_navSnd ) );
+
+	
     m_gui->SetNavMode( HGEGUI_UPDOWN );
     m_gui->SetFocus( Engine::instance()->getConfig().menu );
     m_gui->Enter();
@@ -88,21 +94,25 @@ Menu::update( float dt )
     {
         case CTRL_HELP:
         {
+			hge->Effect_Play(m_selectSnd);
             Engine::instance()->switchContext( STATE_HELP );
             break;
         }
         case CTRL_START:
         {
+			hge->Effect_Play(m_selectSnd);
             Engine::instance()->switchContext( STATE_GAME );
             break;
         }
         case CTRL_SCORE:
         {
+			hge->Effect_Play(m_selectSnd);
             Engine::instance()->switchContext( STATE_SCORE );
             break;
         }
         case CTRL_HOME:
         {
+			hge->Effect_Play(m_selectSnd);
             hge->System_Launch( "http://rockethands.com/99sheep" );
         }
         case CTRL_EXIT:

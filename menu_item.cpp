@@ -1,18 +1,19 @@
 //==============================================================================
 
 #include <menu_item.hpp>
-
+#include <Engine.hpp>
 #include <hgeresource.h>
 #include <hgefont.h>
 
 //------------------------------------------------------------------------------
 MenuItem::MenuItem( int control, float x, float y, const char * title,
-                    hgeFont * font )
+                    hgeFont * font, HEFFECT snd )
     :
     hgeGUIObject(),
     m_title( title ),
     m_font( font ),
-    m_focused( false )
+    m_focused( false ),
+	m_snd( snd )
 {
     id = control;
 
@@ -65,10 +66,17 @@ MenuItem::IsDone()
 }
 
 //------------------------------------------------------------------------------
+#include <iostream>
 void
 MenuItem::Focus( bool focused )
 {
     m_focused = focused;
+
+	std::cout<<"Menu Snd"<<m_snd;
+	if(m_focused && m_snd)
+	{
+		Engine::hge()->Effect_Play(m_snd);
+	}
 }
 
 //------------------------------------------------------------------------------

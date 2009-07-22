@@ -51,6 +51,8 @@ class Fujin : public Entity, public Damageable
     float m_bullet_timer;
     std::vector< Cloud * > m_join;
     std::vector< Cloud * > m_friends;
+	HEFFECT m_shotSnd;
+	HEFFECT m_collectSnd;
 };
 
 #endif

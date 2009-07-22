@@ -134,6 +134,8 @@ class Engine : public b2BoundaryListener, public b2ContactListener,
     hgeGUI * m_gui;
     bool m_stick;
     HCHANNEL m_channel;
+	HEFFECT m_navSnd;
+	HEFFECT m_selectSnd;
 };
 
 #endif

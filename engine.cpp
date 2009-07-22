@@ -182,9 +182,14 @@ Engine::init()
     m_gui = new hgeGUI();
     float cx( 0.5f * m_vp->screen().x );
     float cy( 0.5f * m_vp->screen().y );
+
+	m_navSnd = m_rm->GetEffect( "menu_nav" );
+	m_selectSnd = m_rm->GetEffect( "menu_select" );
+
     m_gui->AddCtrl( new MenuItem( EC_CONTINUE, cx, cy - 15, "Continue",
-                                  font ) );
-    m_gui->AddCtrl( new MenuItem( EC_QUIT, cx, cy + 15 , "Quit", font ) );
+                                  font, m_navSnd ) );
+
+    m_gui->AddCtrl( new MenuItem( EC_QUIT, cx, cy + 15 , "Quit", font, m_navSnd ) );
     m_gui->SetNavMode( HGEGUI_UPDOWN );
     m_gui->SetFocus( 1 );
     m_gui->Enter();
@@ -584,12 +589,14 @@ Engine::_update()
         {
             case EC_CONTINUE:
             {
+				m_hge->Effect_Play(m_selectSnd);
                 m_paused = false;
                 m_gui->SetFocus( 1 );
                 break;
             }
             case EC_QUIT:
             {
+				m_hge->Effect_Play(m_selectSnd);
                 m_gui->SetFocus( 1 );
                 switchContext( STATE_MENU );
                 return false;
