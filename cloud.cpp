@@ -12,6 +12,7 @@
 #include <Query.h>
 #include <hgeparticle.h>
 #include <hgeresource.h>
+#include <viewport.hpp>
 
 //------------------------------------------------------------------------------
 
@@ -57,7 +58,8 @@ Cloud::Cloud( float scale )
     m_life( 4.0f ),
 	m_hitSameSnd( 0 ),
 	m_hitDiffSnd( 0 ),
-	m_divideSnd( 0 )
+	m_divideSnd( 0 ),
+	m_growSnd( 0 )
 {
 }
 
@@ -70,18 +72,20 @@ Cloud::~Cloud()
 void
 Cloud::collide( Entity * entity, b2ContactPoint * point )
 {
+	float pan( Engine::vp()->worldToPan( entity->getBody()->GetPosition() ) );
     if ( getFriend() || entity->getType() != Bullet::TYPE )
     {
         return;
     }
     if ( entity->getBlack() != getBlack() || m_size == 0 )
     {
-		Engine::hge()->Effect_Play(m_hitDiffSnd);
+		
+		Engine::hge()->Effect_PlayEx(m_hitDiffSnd, 100, (int)(100.0f * pan));
         takeDamage( DAMAGE[ m_size ] );
     }
     else if ( m_size > 0 && m_size < 4 )
     {
-		Engine::hge()->Effect_Play(m_hitSameSnd);
+		Engine::hge()->Effect_PlayEx(m_hitSameSnd, 100, (int)(100.0f * pan));
         addStrength( DAMAGE[ m_size + 1 ] );
     }
     entity->destroy();
@@ -195,6 +199,7 @@ Cloud::doInit()
 	m_hitSameSnd = Engine::rm()->GetEffect("sheep_hit_same");
 	m_hitDiffSnd = Engine::rm()->GetEffect("sheep_hit_diff");
 	m_divideSnd = Engine::rm()->GetEffect("sheep_divide");
+	m_growSnd = Engine::rm()->GetEffect("sheep_grow");
 }
 
 //------------------------------------------------------------------------------
@@ -215,14 +220,16 @@ Cloud::doUpdate( float dt )
     {
         m_sprite = Engine::rm()->GetSprite( WHITE[m_size] );
     }
+
+	float pan( Engine::vp()->worldToPan( getBody()->GetPosition() ) );
     if ( isDestroyed() )
     {
         if ( m_size > 0 )
-        {
-			Engine::hge()->Effect_Play(m_divideSnd);
+        {		
+			Engine::hge()->Effect_PlayEx(m_divideSnd, 100, (int)(100.0f * pan));
             for ( int i = 0; i < 3; ++i )
             {
-                Entity* entity = Engine::em()->factory( Cloud::TYPE );
+                Entity* entity = Engine::em()->factory( Cloud::TYPE );				
                 if ( getBlack() )
                 {
                     entity->setBlack( 0 );
@@ -242,6 +249,7 @@ Cloud::doUpdate( float dt )
     }
     else if ( isHealthy() && m_size < 4 )
     {
+		Engine::hge()->Effect_PlayEx(m_growSnd, 100, (int)(100.0f * pan));
         Entity* entity = Engine::em()->factory( Cloud::TYPE );
         if ( getBlack() )
         {

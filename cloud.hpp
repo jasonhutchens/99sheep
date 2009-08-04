@@ -48,6 +48,7 @@ class Cloud : public Entity, public Damageable
 	HEFFECT m_hitSameSnd;
 	HEFFECT m_hitDiffSnd;
 	HEFFECT m_divideSnd;
+	HEFFECT m_growSnd;
 };
 
 #endif

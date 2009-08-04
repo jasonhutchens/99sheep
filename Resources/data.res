@@ -202,17 +202,17 @@ Sound shot_fired
 
 Sound sheep_hit_same
 {
-	filename="sheep_hit.wav"
+	filename="sheep_hit_same.wav"
 }
 
 Sound sheep_hit_diff
 {
-	filename="sheep_hit.wav"
+	filename="sheep_hit_diff.wav"
 }
 
 Sound sheep_grow
 {
-	filename="menu_select.wav"
+	filename="sheep_grow.wav"
 }
 
 Sound sheep_divide

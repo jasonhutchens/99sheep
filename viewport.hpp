@@ -19,6 +19,9 @@ class ViewPort
     b2Vec2 & bounds();
     b2Vec2 & screen();
     void screenToWorld( b2Vec2 & point );
+	void worldToScreen( b2Vec2 & point );		 
+	void worldToNormalisedScreen( b2Vec2 & point );
+	float worldToPan( b2Vec2 point );
     float hscale() const;
     float vscale() const;
     void setScale( float scale );

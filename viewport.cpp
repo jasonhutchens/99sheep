@@ -98,6 +98,43 @@ ViewPort::screenToWorld( b2Vec2 & point )
     point.x /= m_hscale;
     point.y /= m_vscale;
 }
+//------------------------------------------------------------------------------
+void
+ViewPort::worldToScreen( b2Vec2 & point )
+{
+    _updateRatios();
+		
+    float dx( 0.5f * m_screen.x - m_centre.x * m_hscale );
+    float dy( 0.5f * m_screen.y - m_centre.y * m_vscale );
+
+    dx = 0.5f * m_screen.x;
+    dy = 0.5f * m_screen.y;
+
+	point.x *= m_hscale;
+    point.y *= m_vscale;
+    point.x += dx;
+    point.y += dy;
+}
+
+//------------------------------------------------------------------------------
+void
+ViewPort::worldToNormalisedScreen( b2Vec2 & point )
+{
+	worldToScreen( point );
+	point.x /= m_screen.x;
+	point.y /= m_screen.y;
+}
+
+//------------------------------------------------------------------------------
+float
+ViewPort::worldToPan( b2Vec2 point )
+{
+	worldToNormalisedScreen(point);
+
+	//TODO: Allow game defined pan scaling (not hard coded)
+	return ( ( point.x - 0.5f ) * 2.0f ) * 0.75f; //75% pan scaling
+}
+
 
 //------------------------------------------------------------------------------
 float

@@ -13,6 +13,7 @@
 #include <Query.h>
 #include <hgeparticle.h>
 #include <hgeresource.h>
+#include <viewport.hpp>
 
 namespace
 {
@@ -317,8 +318,8 @@ Fujin::doUpdate( float dt )
         position = position + heading;
         bullet->getBody()->SetXForm( position, m_body->GetAngle() );
 
-		//TODO: The bullet should play the sound
-		Engine::hge()->Effect_Play(m_shotSnd);
+		float pan( Engine::vp()->worldToPan( position ) );			
+		Engine::hge()->Effect_PlayEx(m_shotSnd, 100, (int)(100.0f * pan));
     }
 
     if ( getBlack() )
