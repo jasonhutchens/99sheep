@@ -150,7 +150,6 @@ Tutorial::update( float dt )
 	// TODO: Online high scores
 	// TODO: Replace HUD with timer in full screen digits, and slider that moves left to right
 	// TODO: Finish sounds
-	// TODO: Make little guys really colourful
 	// TODO: Particle effects (bullet hit, player die, expand, break)
 
     return false;
