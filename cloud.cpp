@@ -59,7 +59,8 @@ Cloud::Cloud( float scale )
 	m_hitSameSnd( 0 ),
 	m_hitDiffSnd( 0 ),
 	m_divideSnd( 0 ),
-	m_growSnd( 0 )
+	m_growSnd( 0 ),
+	m_colour( 0xFFFFFFFF )
 {
 }
 
@@ -220,6 +221,7 @@ Cloud::doUpdate( float dt )
     {
         m_sprite = Engine::rm()->GetSprite( WHITE[m_size] );
     }
+	_setColour();
 
 	float pan( Engine::vp()->worldToPan( getBody()->GetPosition() ) );
     if ( isDestroyed() )
@@ -289,7 +291,7 @@ Cloud::doRender( float scale )
     }
     else
     {
-        m_sprite->SetColor( 0xFFFFFFFF );
+        m_sprite->SetColor( m_colour );
         m_sprite->RenderEx( position.x, position.y, angle, m_scale );
     }
 }
@@ -312,6 +314,19 @@ Cloud::initFromQuery( Query & query )
     init();
 
     m_body->SetXForm( position, angle );
+}
+
+//------------------------------------------------------------------------------
+void
+Cloud::_setColour()
+{
+	if ( m_size > 0 || m_colour != 0xFFFFFFFF )
+	{
+		return;
+	}
+	m_colour = ARGB( 255, Engine::hge()->Random_Int( 0, 255 ),
+						  Engine::hge()->Random_Int( 0, 255 ),
+						  Engine::hge()->Random_Int( 0, 255 ) );
 }
 
 //==============================================================================

@@ -119,6 +119,40 @@ Tutorial::update( float dt )
 
     vp->centre() = m_fujin->getBody()->GetPosition();
 
+	// TODO: Cap'n speech bubble, click once to complete, twice to hide
+	// TODO: Show sequence of instructions, change text depending on controls
+	//		 "Welcome! It seems we're LOST. And I hear BLEATING!"
+	//		 "Move with the LEFT STICK, or unplug for keyboard control"
+	//		 "Use W A S D to move, or plug in a controller"
+	//		 (when they move a certain distance, show the next one)
+	//		 "Wow... look at the SIZE of that thing!"
+	//		 "Shoot with the RIGHT STICK. Try killing that sheep!"
+	//		 "Shoot with the LMB. Try killing that sheep!"
+	//		 (when the sheep grows, show the next one)
+	//	     "Hmmm... it EATS bullets of the same colour!"
+	//		 "Perhaps you can kill it now that it's turned BLACK?"
+	//		 (when it splits into 4, show the next one)
+	//	     "Aha, I see! You can feed 'em or split 'em!"
+	//		 "You can FLIP colours with the shoulder buttons."
+	//       "You can FLIP colours with the RMB."
+	//		 "Destroy them all!"
+	//		 (when the player dies)
+	//		 "Hmmm... it seems it's bad to COLLIDE with a sheep of OPPOSITE colour!"
+	//		 (when a tiny sheep appears)
+	//		 "Hmmm... perhaps try COLLECTING that tiny one, instead of KILLING it."
+	//		 (when one is collected)
+	//		 "Now I finally understand!"
+	//	     "You must form a TAIL of 99 Sheep... in 99 Seconds!"
+	//		 "Play the game by pressing the ESCAPE key, then selecting QUIT."
+	//		 "Play the game by pressing START, then selecting QUIT."
+	//		 (wait for the player)
+	// TODO: Don't allow START until the tutorial is completed
+	// TODO: Online high scores
+	// TODO: Replace HUD with timer in full screen digits, and slider that moves left to right
+	// TODO: Finish sounds
+	// TODO: Make little guys really colourful
+	// TODO: Particle effects (bullet hit, player die, expand, break)
+
     return false;
 }
 

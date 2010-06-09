@@ -42,6 +42,8 @@ class Cloud : public Entity, public Damageable
     virtual void initFromQuery( Query & query );
 
   private:
+    void _setColour();
+
     int m_size;
     bool m_friend;
     float m_life;
@@ -49,6 +51,7 @@ class Cloud : public Entity, public Damageable
 	HEFFECT m_hitDiffSnd;
 	HEFFECT m_divideSnd;
 	HEFFECT m_growSnd;
+	DWORD m_colour;
 };
 
 #endif
